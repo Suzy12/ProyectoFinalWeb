@@ -1,0 +1,76 @@
+.card a {
+    text-decoration: none;
+    color: var(--blue-button);
+}
+
+p,
+.p {
+    margin: 0 0 16px;
+}
+
+/*Stars*/
+.checked {
+    color: sandybrown;
+}
+
+.position-stars {
+    margin-top: -30px;
+    margin-left: 70%;
+}
+
+.position-right {
+    margin-top: -60px;
+    margin-left: 80%;
+}
+
+.icon-call {
+    color: blue;
+}
+.icon-output {
+    color: green;
+}
+
+a {
+    text-decoration: none;
+    color: var(--text-gray);
+}
+
+.card-code {
+    background-color: #f5f2f0;
+}
+
+.star {
+    font-size: 1.5rem;
+    color: #b0c4de;
+}
+.filled {
+    color: sandybrown;
+}
+
+
+.btn-filled:hover,
+.btn-filled:focus {
+    border: 1px solid blue;
+    color: white !important;
+}
+
+.btn-filled{
+    transition: all 0.5s ease-in-out;
+}
+.btn-filled:hover,
+.btn-filled:focus {
+    transform: scale(1.1);
+    color: white;
+    border: none;
+}
+
+.btn-outline-info:hover{
+    color: white !important;
+}
+
+
+
+
+/*References: 
+https://auralinna.blog/post/2017/code-syntax-highlighting-with-angular-and-prismjs/
+https://stackblitz.com/edit/angular-prismjs-highlight?fbclid=IwAR07YF5w9nR2JrLHiFxafItPPDXlIyd9PjzjM-x3-UyKYHcjr0LRNCWFTWY&file=src%2Fapp%2Fservices%2Fhighlight.service.ts*/

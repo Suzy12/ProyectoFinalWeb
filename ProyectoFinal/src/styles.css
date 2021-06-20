@@ -1,1 +1,66 @@
 /* You can add global styles to this file, and also import other style files */
+
+* {
+    transition: all 0.3s ease-out;
+}
+
+
+:root {
+    --blue-background: rgb(0, 153, 204, 0.25);
+    --blue-button: rgb(0, 153, 204, 0.8);
+    --text-gray: #47525e;
+    --very-light-gray: rgb(245, 244, 244, 0.3)
+}
+
+body {
+    color: #47525e;
+}
+
+.card {
+    border: 0;
+    border-radius: 0;
+    position: relative;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    min-width: 0;
+    word-wrap: break-word;
+    background-color: rgb(245, 244, 244);
+    border-radius: 5%;
+}
+
+.card-text {
+    padding-top: 12px;
+    color: #8c8c8c;
+}
+
+.text-sm {
+    font-size: 12px !important;
+}
+
+.card-title {
+    margin: 0;
+    font-size: 18px;
+    color: var(--text-gray);
+}
+
+.head-icon {
+    margin-top: 30px;
+    color: black;
+}
+
+.position-icon {
+    width: 90px;
+    height: 90px;
+    margin-top: -45px;
+    margin-left: 10%;
+}
+
+.btn-fill {
+    background-color: var(--blue-button);
+    color: white;
+}

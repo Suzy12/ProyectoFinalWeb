@@ -24,6 +24,9 @@
               "src/assets"
             ],
             "styles": [
+              "node_modules/bootstrap/dist/css/bootstrap.min.css",
+              "node_modules/prismjs/plugins/toolbar/prism-toolbar.css",
+              "node_modules/prismjs/themes/prism.css",
               "src/styles.css"
             ],
             "scripts": []
@@ -119,6 +122,10 @@
           }
         }
       }
-    }},
-  "defaultProject": "ProyectoFinal"
+    }
+  },
+  "defaultProject": "ProyectoFinal",
+  "cli": {
+    "analytics": false
+  }
 }

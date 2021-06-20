@@ -1,0 +1,228 @@
+@media (min-width: 200px) and (max-width: 1000px) {
+    .home_left_img {
+        display: none;
+    }
+}
+
+@media (min-width: 200px) and (max-width: 800px) {
+    .python {
+        display: none;
+    }
+}
+
+
+/*------------HOME BANNER------------*/
+
+/*Botones fondo blanco*/
+.btn-filled {
+    padding: 15px 30px !important;
+}
+.btn-filled:hover,
+.btn-filled:focus {
+    border: 1px solid #fff;
+    color: white !important;
+    background-color: transparent !important;
+}
+
+.home_banner_area {
+    background: var(--blue-background);
+    padding-top: 10%;
+    padding-bottom: 5%;
+}
+
+/*------------EXERCISES BANNER------------*/
+.exercises_area {
+    padding: 5% 0;
+}
+.exercises_area p {
+    color: gray;
+}
+
+/*Main Title for all banners*/
+.main_title {
+    margin-bottom: 5%;
+}
+
+.main_title p {
+    margin: 0 20%;
+}
+
+.arrows-btn {
+    color: lightgray;
+}
+
+/*------------LEVELS BANNER------------*/
+.levels_area {
+    padding: 5%;
+}
+
+.levels_area,
+.levels_area h2 {
+    background-color: var(--very-light-gray) !important;
+    text-align: center;
+}
+
+/*Stars*/
+.checked {
+    color: white;
+}
+
+.container-stars {
+    background-color: rgba(170, 170, 170, 0.4);
+    max-width: 190px;
+    min-width: 190px;
+}
+
+.stars p {
+    padding-top: 10px;
+    font-size: 15px;
+}
+
+/*------------CATEGORIES BANNER------------*/
+.categories_area {
+    padding: 5%;
+}
+
+.categories_area,
+.categories_area h2 {
+    text-align: center;
+}
+
+/*------------PYTHON BANNER------------*/
+.python_area {
+    padding: 5%;
+    background: var(--blue-background);
+}
+
+.python_area,
+.python_area h2 {
+    text-align: center;
+}
+
+.python-logo img {
+    width: 25%;
+    height: auto;
+    margin-right: 70%;
+}
+
+.python-logo {
+    margin-top: -12%;
+}
+
+.btn-outline-white {
+    padding: 15px 30px !important;
+    background: transparent;
+    border: 1px solid white;
+    color: white;
+}
+
+.btn-outline-white:hover {
+    background-color: var(--blue-button);
+    color: white;
+    border: none;
+}
+
+/*------------GENERAL BANNER------------*/
+.general_area {
+    padding: 5%;
+    background: var(--very-light-gray);
+    text-align: center;
+}
+
+.tec-logo img {
+    margin-top: 5%;
+    width: 60%;
+    height: auto;
+}
+.grayscale {
+    filter: grayscale(100%);
+}
+
+.laptop img {
+    width: 30%;
+    height: auto;
+}
+
+
+
+
+
+.card:hover {
+    box-shadow: 0px 0px 999px 999px rgba(255, 255, 255, 0.5);
+    z-index: 500;
+}
+.card:hover .head-icon {
+    color: var(--blue-button);
+}
+
+a.card {
+    text-decoration: none;
+}
+
+.card {
+    border: 0;
+    border-radius: 0;
+    position: relative;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    min-width: 0;
+    word-wrap: break-word;
+    background-color: rgb(245, 244, 244);
+    border-radius: 5%;
+}
+
+.mx-auto {
+    margin-left: auto !important;
+    margin-right: auto !important;
+}
+
+.card-text {
+    padding-top: 12px;
+    color: #8c8c8c;
+}
+
+.card-foot {
+    font-size: 14px;
+}
+.card-foot p {
+    margin-bottom: 5px;
+}
+
+.card-foot i {
+    color: var(--text-gray);
+}
+
+.card-foot span,
+.card-foot a {
+    margin-left: 3%;
+}
+
+.text-sm {
+    font-size: 12px !important;
+}
+p,
+.p {
+    margin: 0 0 16px;
+}
+
+.card-title {
+    margin: 0;
+    font-size: 18px;
+    color: var(--text-gray);
+}
+
+.head-icon {
+    margin-top: 30px;
+    color: black;
+}
+
+.position-icon {
+    width: 90px;
+    height: 90px;
+    margin-top: -45px;
+}
