@@ -10,36 +10,18 @@ body {
     width: 100%;
 }
 
-.card{
+.card {
     border: 1px solid lightgray;
-}
-
-@media (min-width: 576px) {
-    .container {
-        max-width: 540px;
-    }
-}
-
-@media (min-width: 768px) {
-    .container {
-        max-width: 720px;
-    }
-}
-
-@media (min-width: 992px) {
-    .container {
-        max-width: 960px;
-    }
-}
-
-@media (min-width: 1200px) {
-    .container {
-        max-width: 1140px;
-    }
 }
 
 .card-columns .card {
     margin-bottom: 0.75rem;
+}
+
+@media (min-width: 576px) and (max-width: 993px) {
+    .img-users {
+        display: none;
+    }
 }
 
 @media (min-width: 576px) {
@@ -75,8 +57,8 @@ p {
     color: var(--blue-button);
 }
 
-.tec_logo {
-    padding-left: 0px;
+.tec-logo {
+    margin-top: -60px;
 }
 .grayscale {
     filter: grayscale(100%);
