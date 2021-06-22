@@ -1,10 +1,10 @@
 
-import {Component, QueryList, ViewChildren,  OnInit} from '@angular/core';
-import {Observable} from 'rxjs';
+import { Component, QueryList, ViewChildren, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
 
-import {Country} from '../../models/category.model';
-import {CategoriesService} from '../../services/categories/categories.service';
-import {NgbdSortableHeader, SortEvent} from '../../directives/sortable.directive';
+import { Country } from '../../models/category.model';
+import { CategoriesService } from '../../services/categories/categories.service';
+import { NgbdSortableHeader, SortEvent } from '../../directives/sortable.directive';
 
 @Component({
   selector: 'app-home',
@@ -12,6 +12,9 @@ import {NgbdSortableHeader, SortEvent} from '../../directives/sortable.directive
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
+
+  exercises = [1, 2, 3, 4, 5];
+  slides = [];
 
 
   countries$: Observable<Country[]>;
@@ -25,9 +28,16 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit(): void {
+
+    let slide = Math.ceil(this.exercises.length / 3);
+    var mult = 0;
+    for (var i = 0; i < slide; i += 1) {
+      this.slides.push(mult);
+      mult += 3;
+    }
   }
 
-  onSort({column, direction}: SortEvent) {
+  onSort({ column, direction }: SortEvent) {
     // resetting other headers
     this.headers.forEach(header => {
       if (header.sortable !== column) {
@@ -38,6 +48,5 @@ export class HomeComponent implements OnInit {
     this.categoriesService.sortColumn = column;
     this.categoriesService.sortDirection = direction;
   }
-
 
 }

@@ -18,3 +18,9 @@ footer.footer-light span {
 footer .ft-heart:before {
     padding-right: 0.3rem;
 }
+
+footer {
+    min-width: 100%;
+    position:fixed;
+    bottom:0;
+}

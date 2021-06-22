@@ -13,6 +13,9 @@ import {DecimalPipe} from '@angular/common';
 import { FooterComponent } from './components/shared/footer/footer.component';
 import { ExerciseComponent } from './components/exercise/exercise.component';
 import { HighlightService } from './services/highlight/highlight.service';
+import { SearchComponent } from './components/search/search.component';
+import { LoginComponent } from './components/login/login.component';
+import { CategoryComponent } from './components/category/category.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +25,10 @@ import { HighlightService } from './services/highlight/highlight.service';
     ExerciseCardComponent,
     NgbdSortableHeader,
     FooterComponent,
-    ExerciseComponent
+    ExerciseComponent,
+    SearchComponent,
+    LoginComponent,
+    CategoryComponent
   ],
   imports: [
     BrowserModule,

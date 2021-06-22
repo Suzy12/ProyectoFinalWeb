@@ -34,94 +34,18 @@
                     <div class="col-12">
                         <div id="carouselExampleIndicators2" class="carousel slide" data-ride="carousel">
                             <div class="carousel-inner" id="carouselExercises">
-                                <div class="carousel-item active">
+                                <div *ngFor="let num of slides"
+                                    [ngClass]="{'active': num == 0}"
+                                    class="carousel-item">
                                     <div class="row text-center">
                                         <div class="col-lg-4 mt-5">
-                                            <div class="card">
-                                                <div class="mx-auto position-icon">
-                                                    <i class="fas fa-code fa-2x head-icon"></i>
-                                                </div>
-                                                <div class="card-body text-left ml-3 ">
-                                                    <h3 class="card-title pt-1">Cantidad de dígitos</h3>
-                                                    <p class="card-text text-sm">Lorem ipsum dolor sit amet, consectetur
-                                                        adipiscing elit, sed do
-                                                        eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-                                                        enim ad minim veniam,
-                                                        quis nostrud exercitation ullamco laboris nisi ut aliquip.</p>
-                                                    <div class="card-foot">
-                                                        <p>
-                                                            <i class="far fa-user"></i>
-                                                            <span>Natalia Vargas</span>
-                                                        </p>
-                                                        <p>
-                                                            <i class="far fa-calendar"></i>
-                                                            <span>2021-10-10</span>
-                                                        </p>
-                                                        <p>
-                                                            <i class="fas fa-tag"></i>
-                                                            <a href="#">Algoritmos Numéricos</a>
-                                                        </p>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                            <app-exercise-card></app-exercise-card>
                                         </div>
-                                        <div class="col-lg-4 mt-5">
-                                            <div class="card">
-                                                <div class="mx-auto position-icon">
-                                                    <i class="fas fa-code-branch fa-2x head-icon"></i>
-                                                </div>
-                                                <div class="card-body text-left ml-3 ">
-                                                    <h3 class="card-title pt-1">Cantidad de dígitos</h3>
-                                                    <p class="card-text text-sm">Lorem ipsum dolor sit amet, consectetur
-                                                        adipiscing elit, sed do
-                                                        eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-                                                        enim ad minim veniam,
-                                                        quis nostrud exercitation ullamco laboris nisi ut aliquip.</p>
-                                                    <div class="card-foot">
-                                                        <p>
-                                                            <i class="far fa-user"></i>
-                                                            <span>Natalia Vargas</span>
-                                                        </p>
-                                                        <p>
-                                                            <i class="far fa-calendar"></i>
-                                                            <span>2021-10-10</span>
-                                                        </p>
-                                                        <p>
-                                                            <i class="fas fa-tag"></i>
-                                                            <a href="#">Algoritmos Numéricos</a>
-                                                        </p>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                        <div *ngIf = "exercises[num+1]" class="col-lg-4 mt-5">
+                                            <app-exercise-card></app-exercise-card>
                                         </div>
-                                        <div class="col-lg-4 mt-5">
-                                            <div class="card">
-                                                <div class="mx-auto position-icon">
-                                                    <i class="fas fa-code fa-2x head-icon"></i>
-                                                </div>
-                                                <div class="card-body text-left ml-3 ">
-                                                    <h3 class="card-title pt-1">Cantidad de dígitos</h3>
-                                                    <p class="card-text text-sm">Lorem ipsum dolor sit amet, consectetur
-                                                        adipiscing elit, sed do
-                                                        eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-                                                        enim ad minim veniam,
-                                                        quis nostrud exercitation ullamco laboris nisi ut aliquip.</p>
-                                                    <div class="card-foot">
-                                                        <p>
-                                                            <i class="far fa-user"></i>
-                                                            <span>Natalia Vargas</span>
-                                                        </p>
-                                                        <p>
-                                                            <i class="far fa-calendar"></i>
-                                                            <span>2021-10-10</span>
-                                                        </p>
-                                                        <p>
-                                                            <i class="fas fa-tag"></i>
-                                                            <a href="#">Algoritmos Numéricos</a>
-                                                        </p>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                        <div *ngIf = "exercises[num+2]" class="col-lg-4 mt-5">
+                                            <app-exercise-card></app-exercise-card>
                                         </div>
                                     </div>
                                 </div>
