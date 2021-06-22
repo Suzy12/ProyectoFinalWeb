@@ -17,6 +17,9 @@ import { SearchComponent } from './components/search/search.component';
 import { LoginComponent } from './components/login/login.component';
 import { CategoryComponent } from './components/category/category.component';
 
+import { AngularFireModule } from '@angular/fire';
+import { AngularFireDatabaseModule } from '@angular/fire/database';
+import { environment } from '../environments/environment';
 @NgModule({
   declarations: [
     AppComponent,
@@ -34,7 +37,9 @@ import { CategoryComponent } from './components/category/category.component';
     BrowserModule,
     AppRoutingModule,
     FormsModule,
-    NgbModule
+    NgbModule,
+    AngularFireModule.initializeApp(environment.firebase),
+    AngularFireDatabaseModule
   ],
   providers: [DecimalPipe, HighlightService],
   bootstrap: [AppComponent]
