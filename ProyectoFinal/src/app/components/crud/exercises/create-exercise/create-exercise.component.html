@@ -1,0 +1,183 @@
+<div class="container mt-5">
+    <form [formGroup]="productForm" (ngSubmit)="saveExercise()" novalidate>
+
+        <div class="row">
+            <div class="col-lg-6 col-12">
+
+                <!-- GENERAL -->
+                <h5 class="font-weight-light">Información General</h5>
+                <hr>
+                <div class="form-group">
+                    <i class="fas fa-user-circle"></i>
+                    <label for="name">Nombre </label>
+                    <input type="text" id="name" name="name" formControlName="name" class="form-control" required
+                        [ngClass]="{ 'is-invalid': submitted && form.name.errors }">
+                    <div *ngIf="submitted && form.name.errors" class="invalid-feedback">
+                        <div *ngIf="form.name.errors.required">
+                            <label class="font-weight-bold"><i class="fa fa-exclamation-circle"></i> El campo
+                                de nombre es obligatorio</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <i class="fas fa-tag"></i>
+                    <label for="section">Categoría</label>
+                    <select class="form-control" name="section" formControlName="section" class="form-control" #section
+                        required [ngClass]="{ 'is-invalid': submitted && form.section.errors }">
+                        <option *ngFor="let category of categories" [value]=category>
+                            {{category}}
+                        </option>
+                    </select>
+                    <div *ngIf="submitted && form.section.errors" class="invalid-feedback">
+                        <div *ngIf="form.section.errors.required">
+                            <label class="font-weight-bold"><i class="fa fa-exclamation-circle"></i> El campo
+                                de categoría es obligatorio</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <i class="fas fa-info-circle"></i>
+                    <label for="details">Detalles</label>
+                    <textarea class="form-control" name="details" formControlName="details" #details required rows="3"
+                        [ngClass]="{ 'is-invalid': submitted && form.details.errors }"></textarea>
+                    <div *ngIf="submitted && form.details.errors" class="invalid-feedback">
+                        <div *ngIf="form.details.errors.required">
+                            <label class="font-weight-bold"><i class="fa fa-exclamation-circle"></i> El campo
+                                de detalles es obligatorio</label>
+                        </div>
+                    </div>
+                </div>
+                <!-- END: GENERAL -->
+
+                <!-- EXAMPLES -->
+                <h5 class="font-weight-light mb-3">Ejemplos</h5>
+                <table class="table" formArrayName="examples">
+                    <tr>
+                        <th class="font-weight-normal"><i class="far fa-lightbulb"></i> Agregar Ejemplos</th>
+                        <th width="150px"><button type="button" (click)="addExample()" class="btn btn-outline-info"><i
+                                    class="fas fa-plus"></i>Agregar</button>
+                        </th>
+                    </tr>
+                    <tr *ngFor="let example of examples().controls; let i=index" [formGroupName]="i">
+                        <td>
+                            <input type="text" formControlName="call" class="form-control" placeholder="Llamada">
+                            <input type="text" formControlName="result" class="form-control" placeholder="Salida">
+                            <input type="text" formControlName="comment" class="form-control" placeholder="Comentarios">
+                        </td>
+                        <td>
+                            <button (click)="removeExample(i)" class="btn btn-outline-danger"><i
+                                    class="fas fa-trash"></i>Eliminar</button>
+                        </td>
+                    </tr>
+                </table>
+                <!-- END: EXAMPLES -->
+            </div>
+            <div class="col-lg-6 col-12">
+                <!-- SOLUTION -->
+                <h5 class="font-weight-light mb-3">Solución</h5>
+                <!-- INPUTS -->
+                <div formGroupName="solution">
+                    <table class="table" formArrayName="inputs">
+                        <tr>
+                            <th class="font-weight-normal"><i class="fas fa-sign-in-alt"></i> Agregar Entradas</th>
+                            <th width="150px"><button type="button" (click)="addInput()" class="btn btn-outline-info"><i
+                                        class="fas fa-plus"></i>Agregar</button>
+                            </th>
+                        </tr>
+                        <tr *ngFor="let input of inputs().controls; let i=index" [formGroupName]="i">
+                            <td>
+                                <input type="text" formControlName="name" class="form-control" placeholder="Nombre">
+                                <input type="text" formControlName="type" class="form-control" placeholder="Tipo">
+                            </td>
+                            <td>
+                                <button (click)="removeInput(i)" class="btn btn-outline-danger"><i
+                                        class="fas fa-trash"></i>Eliminar</button>
+                            </td>
+                        </tr>
+                    </table>
+                    <!-- END: INPUTS -->
+
+                    <!-- OUTPUTS -->
+                    <table class="table" formArrayName="outputs">
+                        <tr>
+                            <th class="font-weight-normal"><i class="fas fa-sign-out-alt"></i> Agregar Salidas</th>
+                            <th width="150px"><button type="button" (click)="addOutput()"
+                                    class="btn btn-outline-info"><i class="fas fa-plus"></i>Agregar</button>
+                            </th>
+                        </tr>
+                        <tr *ngFor="let output of outputs().controls; let i=index" [formGroupName]="i">
+                            <td>
+                                <input type="text" formControlName="name" class="form-control" placeholder="Nombre">
+                                <input type="text" formControlName="type" class="form-control" placeholder="Tipo">
+                            </td>
+                            <td>
+                                <button (click)="removeOutput(i)" class="btn btn-outline-danger"><i
+                                        class="fas fa-trash"></i>Eliminar</button>
+                            </td>
+                        </tr>
+                    </table>
+                    <!-- END: OUTPUTS -->
+
+                    <!-- CODE -->
+                    <div class="form-group">
+                        <i class="fas fa-code"></i>
+                        <label for="code">Código</label>
+                        <textarea class="form-control code-input" name="code" formControlName="code" #code required
+                            rows="10"></textarea>
+                    </div>
+                    <!-- END: CODE -->
+                </div>
+                <!-- END: SOLUTION -->
+
+                <!-- FILES -->
+                <h5 class="font-weight-light mb-3">Archivos Adjuntos</h5>
+                <table class="table" formArrayName="files">
+                    <tr>
+                        <th class="font-weight-normal"><i class="fas fa-sign-in-alt"></i> Agregar Archivos</th>
+                        <th width="150px"><button type="button" (click)="addFile()" class="btn btn-outline-info"><i
+                                    class="fas fa-plus"></i>Agregar</button>
+                        </th>
+                    </tr>
+                    <tr *ngFor="let file of files().controls; let i=index" [formGroupName]="i">
+                        <td>
+                            <input type="file" #fileInput (change)="onFileInput(fileInput.files, i)" />
+                        </td>
+                        <td>
+                            <button (click)="removeFile(i)" class="btn btn-outline-danger"><i
+                                    class="fas fa-trash"></i>Eliminar</button>
+                        </td>
+                    </tr>
+                </table>
+                <!-- END: FILES -->
+            </div>
+        </div>
+        <div class="text-right mt-5">
+            <button data-toggle="modal"
+            data-target="#returnModal" class="btn btn-secondary mr-3">Cancelar</button>
+            <button type="submit" class="btn btn-fill">Guardar</button>
+        </div>
+    </form>
+    <br />
+    {{this.productForm.value | json}}
+</div>
+<!-- Modal -->
+<div class="modal fade" id="returnModal" tabindex="-1" role="dialog" aria-labelledby="returnModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="returnModalLabel">Salir</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                ¿Está seguro que desea salir? Todos los cambios se perderán.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button type="button" (click)="return()" class="btn btn-info">Salir</button>
+            </div>
+        </div>
+    </div>
+</div>

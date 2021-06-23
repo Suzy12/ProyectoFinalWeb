@@ -1,0 +1,31 @@
+.panel {
+    box-shadow: 0 2px 0 rgba(0, 0, 0, 0.05);
+    border-radius: 0;
+    border: 0;
+    margin-bottom: 24px;
+}
+
+.panel-body {
+    padding: 25px 20px;
+}
+
+.panel hr {
+    border-color: rgba(0, 0, 0, 0.1);
+}
+
+h2,
+.h2 {
+    font-size: 28px;
+}
+
+.small,
+small {
+    font-size: 85%;
+}
+
+.text-thin {
+    font-weight: 300;
+}
+
+
+/*Reference: https://www.bootdey.com/snippets/view/panel-dashboard-widget#html*/
