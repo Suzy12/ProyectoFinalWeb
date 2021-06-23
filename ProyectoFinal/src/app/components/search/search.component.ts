@@ -19,6 +19,10 @@ export class SearchComponent implements OnInit {
       this.slides.push(mult);
       mult += 3;
     }
+    this.db.getType("0").subscribe((data:any) => {
+      console.log(data)
+    });
+    
   }
 
 }
