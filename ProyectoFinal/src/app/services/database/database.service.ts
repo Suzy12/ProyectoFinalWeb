@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
 import { AngularFireDatabase } from '@angular/fire/database';
+import { type } from 'os';
 import { element } from 'protractor';
 import { map } from 'rxjs/operators';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -51,5 +53,27 @@ export class DatabaseService {
       object.key = element.key;
       return object;
     }))
+  }
+
+  getCantType(type: string) {
+    return this.db.list('exercises').valueChanges().pipe(map((element: any) => {
+      let cant = 0;
+      element.forEach((value: any) => {
+        if (value.section === type) cant++;
+      });
+      return cant;
+    }))
+  }
+
+  getCantTypes() {
+    return this.db.object('/').valueChanges().pipe(map((element: any) => {
+      let listaTipos = element.types.map((value: any) => { return { name: value.name, cant: 0 } })
+      let exercises = element.exercises
+      exercises.forEach((exercise: any) => {
+        let temp = listaTipos.find((tipo: any) => tipo.name === exercise.section);
+        if (temp) temp.cant++;
+      });
+      return listaTipos
+    }));
   }
 }
