@@ -8,13 +8,6 @@ import { map } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class DatabaseService {
-  documentToDomainObject = (_: any) => {
-    const object = _.payload.doc.data();
-    object.id = _.payload.doc.id;
-    return object;
-  }
-
-
 
   constructor(public db: AngularFireDatabase) {
   }
@@ -55,7 +48,47 @@ export class DatabaseService {
     }))
   }
 
-  getCantType(type: string) {
+  insertExercise(exercise: any) {
+    let base = this.db.database.ref('/');
+    let pusher = base.child("exercises").push();
+    pusher.set(exercise);
+    return this.updateNumExercises(1);
+  }
+
+  updateNumExercises(value: number) {
+    this.db.database.ref("metadata").once("value", (count) => {
+      let updates = {}
+      updates["num_exercises"] = count.val().num_exercises + value;
+      return this.db.database.ref("metadata").update(updates);
+    });
+  }
+
+  deleteExercise(key: string) {
+    this.db.list("/exercises").remove(key);
+    return this.updateNumExercises(-1);
+  }
+
+  updateExercise(value: any) {
+    let key = value.key;
+    delete value.key;
+    let updates = {}
+    updates[key] = value;
+    return this.db.database.ref("exercises").update(updates);
+  }
+
+  getCantExercises(){
+    return this.db.object("metadata").valueChanges().pipe(map((count:any) => {
+      return count.num_exercises;
+    }));
+  }
+
+  getCantTypes(){
+    return this.db.object("metadata").valueChanges().pipe(map((count:any) => {
+      return count.num_types;
+    }));
+  }
+
+  getCantOfType(type: string) {
     return this.db.list('exercises').valueChanges().pipe(map((element: any) => {
       let cant = 0;
       element.forEach((value: any) => {
@@ -65,7 +98,7 @@ export class DatabaseService {
     }))
   }
 
-  getCantTypes() {
+  getCantOfTypes() {
     return this.db.object('/').valueChanges().pipe(map((element: any) => {
       let listaTipos = element.types.map((value: any) => { return { name: value.name, cant: 0 } })
       let exercises = element.exercises
