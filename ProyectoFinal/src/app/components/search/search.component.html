@@ -3,6 +3,9 @@
         <div class="row">
             <div class="col-12 text-center">
                 <h2 class="mb-3 font-weight-bold">Busca cualquier ejercicio en la plataforma</h2>
+                <p class="mb-5">Puedes buscar cualquier ejercicio de la plataforma, ya sea por su nombre, su categoría o
+                    su descripción.
+                </p>
             </div>
         </div>
         <div class="row">
@@ -39,24 +42,22 @@
         </div>
     </div>
 </section>
-<section>
+<section class="pb-5">
     <div class="container">
         <div class="row">
             <div class="col-12">
                 <div id="carouselExampleIndicators2" class="carousel slide" data-ride="carousel">
                     <div class="carousel-inner" id="carouselExercises">
-                        <div *ngFor="let num of slides"
-                            [ngClass]="{'active': num == 0}"
-                            class="carousel-item">
+                        <div *ngFor="let num of slides" [ngClass]="{'active': num == 0}" class="carousel-item">
                             <div class="row text-center">
                                 <div class="col-lg-4 mt-5">
-                                    <app-exercise-card></app-exercise-card>
+                                    <app-exercise-card [exercise] = "exercises[num]" [index] = "num"></app-exercise-card>
                                 </div>
                                 <div *ngIf = "exercises[num+1]" class="col-lg-4 mt-5">
-                                    <app-exercise-card></app-exercise-card>
+                                    <app-exercise-card [exercise] = "exercises[num+1]" [index] = "num+1"></app-exercise-card>
                                 </div>
                                 <div *ngIf = "exercises[num+2]" class="col-lg-4 mt-5">
-                                    <app-exercise-card></app-exercise-card>
+                                    <app-exercise-card [exercise] = "exercises[num+2]" [index] = "num+2"></app-exercise-card>
                                 </div>
                             </div>
                         </div>
@@ -66,8 +67,7 @@
         </div>
         <div class="row mt-5 mb-5">
             <div class="col-12 text-center">
-                <a class="mb-3 mr-1 arrows-btn" href="#carouselExampleIndicators2" role="button"
-                    data-slide="prev">
+                <a class="mb-3 mr-1 arrows-btn" href="#carouselExampleIndicators2" role="button" data-slide="prev">
                     <i class="fas fa-chevron-circle-left fa-2x"></i>
                 </a>
                 <a class="mb-3 arrows-btn" href="#carouselExampleIndicators2" role="button" data-slide="next">

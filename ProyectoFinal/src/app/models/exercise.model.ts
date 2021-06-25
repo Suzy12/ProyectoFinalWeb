@@ -2,6 +2,7 @@ import { Example } from './examples.model';
 import { Entry } from './entry.model';
 
 export interface Exercise {
+    key?: number,
     call: string,
     creator: string,
     code: string,

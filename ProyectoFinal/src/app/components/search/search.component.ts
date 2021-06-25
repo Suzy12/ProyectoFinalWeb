@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import {EXERCISES} from '../../models/exercises';
+import { Exercise } from 'src/app/models/exercise.model';
 
 @Component({
   selector: 'app-search',
@@ -6,8 +8,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./search.component.css']
 })
 export class SearchComponent implements OnInit {
-  exercises = [1, 2, 3, 4, 5];
   slides = [];
+  exercises: Exercise[] = EXERCISES;
 
   constructor() { }
 

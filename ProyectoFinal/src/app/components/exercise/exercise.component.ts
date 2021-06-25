@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HighlightService } from 'src/app/services/highlight/highlight.service';
 import {NgbRatingConfig} from '@ng-bootstrap/ng-bootstrap';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-exercise',
@@ -10,13 +11,19 @@ import {NgbRatingConfig} from '@ng-bootstrap/ng-bootstrap';
 })
 export class ExerciseComponent implements OnInit {
 
+  exercise:any = {};
   currentRate = 1;
-  source = "<pre><code class=\"language-python\"> def cantidadDigitos (num):\n\n    if num == 0: # El 0 es una excepción\n        return 1\n    num = abs(num) #lo hace positivo siempre\n    contador = 0\n    while num > 0:\n        contador = contador + 1\n        num = num \/\/ 10\n    return contador </code></pre>";
+  source = "";
   highlighted: boolean = false;
   fileUrl = "https://drive.google.com/file/d/1t58SW2X1PxjkiZ0RhCgTHNxp7PDFFb7P/view?usp=sharing";
 
-  constructor(private highlightService: HighlightService, config: NgbRatingConfig) {
+  constructor(private highlightService: HighlightService, config: NgbRatingConfig, private router: Router) {
     config.max = 5;
+    if (this.router.getCurrentNavigation().extras.state) {
+      this.exercise = this.router.getCurrentNavigation().extras.state;
+      this.source = "<pre><code class=\"language-python\">"+this.exercise.solution.code+"</code></pre>";
+      console.log(this.router.getCurrentNavigation().extras.state)
+    }
   }
 
   ngOnInit() {

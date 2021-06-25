@@ -2,14 +2,14 @@ import {Injectable, PipeTransform} from '@angular/core';
 
 import {BehaviorSubject, Observable, of, Subject} from 'rxjs';
 
-import {Country} from '../../models/category.model';
-import {COUNTRIES} from '../../models/categories';
+import {Category} from '../../models/category.model';
+import {CATEGORIES} from '../../models/categories';
 import {DecimalPipe} from '@angular/common';
 import {debounceTime, delay, switchMap, tap} from 'rxjs/operators';
 import {SortColumn, SortDirection} from '../../directives/sortable.directive';
 
 interface SearchResult {
-  countries: Country[];
+  categories: Category[];
   total: number;
 }
 
@@ -23,28 +23,28 @@ interface State {
 
 const compare = (v1: string | number, v2: string | number) => v1 < v2 ? -1 : v1 > v2 ? 1 : 0;
 
-function sort(countries: Country[], column: SortColumn, direction: string): Country[] {
+function sort(categories: Category[], column: SortColumn, direction: string): Category[] {
   if (direction === '' || column === '') {
-    return countries;
+    return categories;
   } else {
-    return [...countries].sort((a, b) => {
+    return [...categories].sort((a, b) => {
       const res = compare(a[column], b[column]);
       return direction === 'asc' ? res : -res;
     });
   }
 }
 
-function matches(country: Country, term: string, pipe: PipeTransform) {
-  return country.name.toLowerCase().includes(term.toLowerCase())
-    || pipe.transform(country.area).includes(term)
-    || pipe.transform(country.population).includes(term);
+function matches(category: Category, term: string, pipe: PipeTransform) {
+  return category.name.toLowerCase().includes(term.toLowerCase())
+    /*|| pipe.transform(category.details).includes(term)*/
+    || pipe.transform(category.count).includes(term);
 }
 
 @Injectable({providedIn: 'root'})
 export class CategoriesService {
   private _loading$ = new BehaviorSubject<boolean>(true);
   private _search$ = new Subject<void>();
-  private _countries$ = new BehaviorSubject<Country[]>([]);
+  private _categories$ = new BehaviorSubject<Category[]>([]);
   private _total$ = new BehaviorSubject<number>(0);
 
   private _state: State = {
@@ -63,14 +63,14 @@ export class CategoriesService {
       delay(200),
       tap(() => this._loading$.next(false))
     ).subscribe(result => {
-      this._countries$.next(result.countries);
+      this._categories$.next(result.categories);
       this._total$.next(result.total);
     });
 
     this._search$.next();
   }
 
-  get countries$() { return this._countries$.asObservable(); }
+  get categories$() { return this._categories$.asObservable(); }
   get total$() { return this._total$.asObservable(); }
   get loading$() { return this._loading$.asObservable(); }
   get page() { return this._state.page; }
@@ -92,14 +92,19 @@ export class CategoriesService {
     const {sortColumn, sortDirection, pageSize, page, searchTerm} = this._state;
 
     // 1. sort
-    let countries = sort(COUNTRIES, sortColumn, sortDirection);
+    let categories = sort(CATEGORIES, sortColumn, sortDirection);
 
     // 2. filter
-    countries = countries.filter(country => matches(country, searchTerm, this.pipe));
-    const total = countries.length;
+    categories = categories.filter(category => matches(category, searchTerm, this.pipe));
+    const total = categories.length;
 
     // 3. paginate
-    countries = countries.slice((page - 1) * pageSize, (page - 1) * pageSize + pageSize);
-    return of({countries, total});
+    categories = categories.slice((page - 1) * pageSize, (page - 1) * pageSize + pageSize);
+    return of({categories, total});
+  }
+
+
+  getCategory( key : number): Category{
+    return CATEGORIES[key];
   }
 }

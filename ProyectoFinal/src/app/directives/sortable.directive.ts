@@ -1,7 +1,7 @@
 import {Directive, EventEmitter, Input, Output} from '@angular/core';
-import {Country} from '../models/category.model';
+import {Category} from '../models/category.model';
 
-export type SortColumn = keyof Country | '';
+export type SortColumn = keyof Category | '';
 export type SortDirection = 'asc' | 'desc' | '';
 const rotate: {[key: string]: SortDirection} = { 'asc': 'desc', 'desc': '', '': 'asc' };
 

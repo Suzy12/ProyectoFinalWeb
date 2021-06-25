@@ -22,6 +22,7 @@
     "@angular/router": "~10.1.6",
     "@ng-bootstrap/ng-bootstrap": "^8.0.4",
     "bootstrap": "^4.5.0",
+    "cors": "^2.8.5",
     "prism-themes": "^1.7.0",
     "prismjs": "^1.23.0",
     "rxjs": "~6.6.0",

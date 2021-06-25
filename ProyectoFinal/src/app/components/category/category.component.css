@@ -13,6 +13,7 @@ body {
 .card {
     border: 1px solid lightgray;
     border-left: 1px solid lightgray !important;
+    min-height: 350px;
 }
 
 .card-columns .card {

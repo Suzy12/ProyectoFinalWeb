@@ -19,6 +19,7 @@ import { CategoryComponent } from './components/category/category.component';
 import { CreateExerciseComponent } from './components/crud/exercises/create-exercise/create-exercise.component';
 import { CreateCategoryComponent } from './components/crud/categories/create-category/create-category.component';
 import { DashboardComponent } from './components/crud/dashboard/dashboard.component';
+import {HttpClientModule} from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -41,7 +42,8 @@ import { DashboardComponent } from './components/crud/dashboard/dashboard.compon
     AppRoutingModule,
     FormsModule,
     NgbModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    HttpClientModule
   ],
   providers: [DecimalPipe, HighlightService],
   bootstrap: [AppComponent]

@@ -2,9 +2,14 @@
 import { Component, QueryList, ViewChildren, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 
-import { Country } from '../../models/category.model';
+import { Category } from '../../models/category.model';
 import { CategoriesService } from '../../services/categories/categories.service';
 import { NgbdSortableHeader, SortEvent } from '../../directives/sortable.directive';
+
+
+import {EXERCISES} from '../../models/exercises';
+import { Exercise } from 'src/app/models/exercise.model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -13,18 +18,20 @@ import { NgbdSortableHeader, SortEvent } from '../../directives/sortable.directi
 })
 export class HomeComponent implements OnInit {
 
-  exercises = [1, 2, 3, 4, 5];
+  exercises: Exercise[] = EXERCISES;
   slides = [];
 
 
-  countries$: Observable<Country[]>;
+  categories$: Observable<Category[]>;
   total$: Observable<number>;
+  total: number[] = [];
 
   @ViewChildren(NgbdSortableHeader) headers: QueryList<NgbdSortableHeader>;
 
-  constructor(public categoriesService: CategoriesService) {
-    this.countries$ = categoriesService.countries$;
+  constructor(public categoriesService: CategoriesService, private router:Router) {
+    this.categories$ = categoriesService.categories$;
     this.total$ = categoriesService.total$;
+    this.total$.subscribe(event => this.total = Array(event).fill(1).map((x,i)=>i+1));
   }
 
   ngOnInit(): void {
@@ -47,6 +54,10 @@ export class HomeComponent implements OnInit {
 
     this.categoriesService.sortColumn = column;
     this.categoriesService.sortDirection = direction;
+  }
+
+  getCategory(key: number){
+    this.router.navigate(['/category', key]);
   }
 
 }

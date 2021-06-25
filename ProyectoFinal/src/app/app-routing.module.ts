@@ -12,14 +12,14 @@ import { SearchComponent } from './components/search/search.component';
 const routes: Routes = [
   //NOTE: el routing se pone el canActivate la lista de guards
   { path: 'home' , component: HomeComponent},
-  { path: 'exercise' , component: ExerciseComponent},
+  { path: 'exercise/:key' , component: ExerciseComponent},
   { path: 'search' , component: SearchComponent},
   { path: 'login' , component: LoginComponent},
-  { path: 'category' , component: CategoryComponent},
+  { path: 'category/:key' , component: CategoryComponent},
   { path: 'dashboard' , component: DashboardComponent},
   { path: 'create-category' , component: CreateCategoryComponent},
   { path: 'create-exercise' , component: CreateExerciseComponent},
-  { path: '**', redirectTo: 'create-category' }
+  { path: '**', redirectTo: 'home' }
 ];
 
 @NgModule({

@@ -1,7 +1,6 @@
-export interface Country {
-    id: number;
+export interface Category {
+    key?: number;
     name: string;
-    flag: string;
-    area: number;
-    population: number;
+    details?: string;
+    count?: number;
 }

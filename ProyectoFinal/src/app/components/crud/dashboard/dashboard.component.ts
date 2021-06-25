@@ -1,9 +1,10 @@
 import { Component, QueryList, ViewChildren, OnInit } from '@angular/core';
 
 import { Observable } from 'rxjs';
-import { Country } from '../../../models/category.model';
+import { Category } from '../../../models/category.model';
 import { CategoriesService } from '../../../services/categories/categories.service';
 import { NgbdSortableHeader, SortEvent } from '../../../directives/sortable.directive';
+import { CategoryComponent } from '../../category/category.component';
 
 @Component({
   selector: 'app-dashboard',
@@ -12,13 +13,13 @@ import { NgbdSortableHeader, SortEvent } from '../../../directives/sortable.dire
 })
 export class DashboardComponent implements OnInit {
 
-  countries$: Observable<Country[]>;
+  countries$: Observable<Category[]>;
   total$: Observable<number>;
 
   @ViewChildren(NgbdSortableHeader) headers: QueryList<NgbdSortableHeader>;
 
   constructor(public categoriesService: CategoriesService) {
-    this.countries$ = categoriesService.countries$;
+    this.countries$ = categoriesService.categories$;
     this.total$ = categoriesService.total$;
   }
 

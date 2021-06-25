@@ -1,95 +1,82 @@
-import {Country} from './category.model';
+import { Category } from './category.model';
 
-export const COUNTRIES: Country[] = [
+export const CATEGORIES: Category[] = [
   {
-    id: 1,
-    name: 'Russia',
-    flag: 'f/f3/Flag_of_Russia.svg',
-    area: 17075200,
-    population: 146989754
+    key: 0,
+    name: "Algoritmos numéricos",
+    details: "Los algoritmos numéricos son aquellos que se encargan de procesar números un sus funciones",
+    count: 23
   },
   {
-    id: 2,
-    name: 'France',
-    flag: 'c/c3/Flag_of_France.svg',
-    area: 640679,
-    population: 64979548
+    key: 1,
+    name: "Listas, vectores y matrices",
+    details: "Las listas, vectores y matrices son estructuras que nos permiten guardar múltiples datos en una sola variable con un orden definido",
+    count: 24
   },
   {
-    id: 3,
-    name: 'Germany',
-    flag: 'b/ba/Flag_of_Germany.svg',
-    area: 357114,
-    population: 82114224
+    key: 2,
+    name: "Árboles",
+    details: "Los árboles son estructuras utilizadas para guardar datos y buscarlos de manera más eficiente que las listas",
+    count: 25
   },
   {
-    id: 4,
+    key: 3,
     name: 'Portugal',
-    flag: '5/5c/Flag_of_Portugal.svg',
-    area: 92090,
-    population: 10329506
+    details: '5/5c/details_of_Portugal.svg',
+    count: 22
   },
   {
-    id: 5,
+    key: 4,
     name: 'Canada',
-    flag: 'c/cf/Flag_of_Canada.svg',
-    area: 9976140,
-    population: 36624199
+    details: 'c/cf/details_of_Canada.svg',
+    count: 20
   },
   {
-    id: 6,
+    key: 5,
     name: 'Vietnam',
-    flag: '2/21/Flag_of_Vietnam.svg',
-    area: 331212,
-    population: 95540800
+    details: '2/21/details_of_Vietnam.svg',
+    count: 19
   },
   {
-    id: 7,
+    key: 6,
     name: 'Brazil',
-    flag: '0/05/Flag_of_Brazil.svg',
-    area: 8515767,
-    population: 209288278
+    details: '0/05/details_of_Brazil.svg',
+    count: 2
   },
   {
-    id: 8,
+    key: 7,
     name: 'Mexico',
-    flag: 'f/fc/Flag_of_Mexico.svg',
-    area: 1964375,
-    population: 129163276
+    details: 'f/fc/details_of_Mexico.svg',
+    count: 5
   },
   {
-    id: 9,
+    key: 8,
     name: 'United States',
-    flag: 'a/a4/Flag_of_the_United_States.svg',
-    area: 9629091,
-    population: 324459463
+    details: 'a/a4/details_of_the_United_States.svg',
+    count: 10
   },
   {
-    id: 10,
+    key: 9,
     name: 'India',
-    flag: '4/41/Flag_of_India.svg',
-    area: 3287263,
-    population: 1324171354
+    details: '4/41/details_of_India.svg',
+    count: 17
   },
   {
-    id: 11,
+    key: 10,
     name: 'Indonesia',
-    flag: '9/9f/Flag_of_Indonesia.svg',
-    area: 1910931,
-    population: 263991379
+    details: '9/9f/details_of_Indonesia.svg',
+    count: 23
   },
   {
-    id: 12,
+    key: 11,
     name: 'Tuvalu',
-    flag: '3/38/Flag_of_Tuvalu.svg',
-    area: 26,
-    population: 11097
+    details: '3/38/details_of_Tuvalu.svg',
+    count: 14
   },
   {
-    id: 13,
+    key: 12,
     name: 'China',
-    flag: 'f/fa/Flag_of_the_People%27s_Republic_of_China.svg',
-    area: 9596960,
-    population: 1409517397
+    details: 'f/fa/details_of_the_People%27s_Republic_of_China.svg',
+    count: 13
   }
 ];

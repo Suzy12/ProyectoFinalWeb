@@ -1,24 +1,23 @@
-<div class="card">
+<div class="card"  (click)="getExercise()" style="cursor:pointer">
     <div class="mx-auto position-icon">
-        <i class="fas fa-code fa-2x head-icon"></i>
+        <i *ngIf="index % 2 == 0" class="fas fa-code fa-2x head-icon"></i>
+        <i *ngIf="index % 2 != 0" class="fas fa-code-branch fa-2x head-icon"></i>
     </div>
     <div class="card-body text-left ml-3 ">
-        <h3 class="card-title pt-1">Cantidad de dígitos</h3>
-        <p class="card-text text-sm">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-            quis nostrud exercitation ullamco laboris nisi ut aliquip.</p>
+        <h3 class="card-title pt-1">{{exercise.name}}</h3>
+        <p class="card-text text-sm">{{exercise.details}}</p>
         <div class="card-foot">
             <p>
                 <i class="far fa-user"></i>
-                <span>Natalia Vargas</span>
+                <span>{{exercise.creator}}</span>
             </p>
             <p>
                 <i class="far fa-calendar"></i>
-                <span>2021-10-10</span>
+                <span>{{exercise.created}}</span>
             </p>
             <p>
                 <i class="fas fa-tag"></i>
-                <a href="#">Algoritmos Numéricos</a>
+                <a href="#">{{exercise.section}}</a>
             </p>
         </div>
     </div>

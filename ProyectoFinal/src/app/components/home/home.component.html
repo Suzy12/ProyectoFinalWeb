@@ -39,13 +39,13 @@
                                     class="carousel-item">
                                     <div class="row text-center">
                                         <div class="col-lg-4 mt-5">
-                                            <app-exercise-card></app-exercise-card>
+                                            <app-exercise-card [exercise] = "exercises[num]" [index] = "num"></app-exercise-card>
                                         </div>
                                         <div *ngIf = "exercises[num+1]" class="col-lg-4 mt-5">
-                                            <app-exercise-card></app-exercise-card>
+                                            <app-exercise-card [exercise] = "exercises[num+1]" [index] = "num+1"></app-exercise-card>
                                         </div>
                                         <div *ngIf = "exercises[num+2]" class="col-lg-4 mt-5">
-                                            <app-exercise-card></app-exercise-card>
+                                            <app-exercise-card [exercise] = "exercises[num+2]" [index] = "num+2"></app-exercise-card>
                                         </div>
                                     </div>
                                 </div>
@@ -150,7 +150,7 @@
                     et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation.</p>
             </div>
         </div>
-        <div class="row">
+        <div class="row table-row">
             <div class="col-12">
                 <form>
                     <div class="form-group form-inline">
@@ -163,29 +163,27 @@
                         <thead>
                             <tr>
                                 <th scope="col">#</th>
-                                <th scope="col" sortable="name" (sort)="onSort($event)">Country</th>
-                                <th scope="col" sortable="area" (sort)="onSort($event)">Area</th>
-                                <th scope="col" sortable="population" (sort)="onSort($event)">Population</th>
+                                <th scope="col" sortable="name" (sort)="onSort($event)">Categoría</th>
+                                <th scope="col" sortable="count" (sort)="onSort($event)">Ejercicios</th>
+                                <th scope="col">Acción</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr *ngFor="let country of countries$ | async">
-                                <th scope="row">{{ country.id }}</th>
+                            <tr *ngFor="let category of categories$ | async">
+                                <th scope="row">{{ category.key }}</th>
                                 <td>
-                                    <img [src]="'https://upload.wikimedia.org/wikipedia/commons/' + country.flag"
-                                        class="mr-2" style="width: 20px">
-                                    <ngb-highlight [result]="country.name" [term]="categoriesService.searchTerm">
+                                    <ngb-highlight [result]="category.name" [term]="categoriesService.searchTerm">
                                     </ngb-highlight>
                                 </td>
                                 <td>
-                                    <ngb-highlight [result]="country.area | number"
+                                    <ngb-highlight [result]="category.count | number"
                                         [term]="categoriesService.searchTerm">
                                     </ngb-highlight>
                                 </td>
                                 <td>
-                                    <ngb-highlight [result]="country.population | number"
-                                        [term]="categoriesService.searchTerm">
-                                    </ngb-highlight>
+                                    <a class="btn btn-outline-info" (click)="getCategory(category.key)">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
                                 </td>
                             </tr>
                         </tbody>
