@@ -1,7 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { UserModel } from 'src/app/models/user.model';
-import { AuthService } from 'src/app/services/auth/auth.service';
-import { DatabaseService } from 'src/app/services/database/database.service';
 
 @Component({
   selector: 'app-search',
@@ -12,7 +9,7 @@ export class SearchComponent implements OnInit {
   exercises = [1, 2, 3, 4, 5];
   slides = [];
 
-  constructor(private db: AuthService) { }
+  constructor() { }
 
   ngOnInit(): void {
     let slide = Math.ceil(this.exercises.length / 3);
