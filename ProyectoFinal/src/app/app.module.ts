@@ -21,6 +21,10 @@ import { CreateCategoryComponent } from './components/crud/categories/create-cat
 import { DashboardComponent } from './components/crud/dashboard/dashboard.component';
 import {HttpClientModule} from '@angular/common/http';
 
+import { AngularFireModule } from '@angular/fire';
+import { AngularFireDatabaseModule } from '@angular/fire/database';
+import { environment } from '../environments/environment';
+import { HttpClientModule } from '@angular/common/http';
 @NgModule({
   declarations: [
     AppComponent,
@@ -43,6 +47,8 @@ import {HttpClientModule} from '@angular/common/http';
     FormsModule,
     NgbModule,
     ReactiveFormsModule,
+    AngularFireModule.initializeApp(environment.firebase),
+    AngularFireDatabaseModule,
     HttpClientModule
   ],
   providers: [DecimalPipe, HighlightService],
