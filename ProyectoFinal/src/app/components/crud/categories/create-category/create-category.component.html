@@ -1,5 +1,5 @@
 <div class="container mt-5">
-    <form [formGroup]="productForm" (ngSubmit)="saveCategory()" novalidate>
+    <form [formGroup]="categoryForm" (ngSubmit)="saveExercise()" novalidate>
 
         <div class="row">
             <div class="col-lg-6 col-12">
@@ -45,7 +45,7 @@
                     </tr>
                     <tr *ngFor="let file of files().controls; let i=index" [formGroupName]="i">
                         <td>
-                            <input type="file" #fileInput (change)="onFileInput(fileInput.files, i)" />
+                            <input type="file" #fileInput (change)="onFileInput($event, i)" />
                         </td>
                         <td>
                             <button (click)="removeFile(i)" class="btn btn-outline-danger"><i
@@ -57,13 +57,14 @@
             </div>
         </div>
         <div class="text-right mt-5">
-            <button data-toggle="modal"
-            data-target="#returnModal" class="btn btn-secondary mr-3">Cancelar</button>
-            <button type="submit" class="btn btn-fill">Guardar</button>
+            <button data-toggle="modal" data-target="#returnModal" class="btn btn-secondary mr-3"
+                [disabled]="loading">Cancelar</button>
+            <button type="submit" class="btn btn-fill" [disabled]="loading"><i *ngIf="loading"
+                    class="fas fa-sync fa-spin"></i>Guardar</button>
         </div>
     </form>
-    <br/>
-    {{this.productForm.value | json}}
+    <br />
+    {{this.categoryForm.value | json}}
 </div>
 
 <!-- Modal -->

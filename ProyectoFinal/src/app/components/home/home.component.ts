@@ -7,9 +7,10 @@ import { CategoriesService } from '../../services/categories/categories.service'
 import { NgbdSortableHeader, SortEvent } from '../../directives/sortable.directive';
 
 
-import {EXERCISES} from '../../models/exercises';
+import { EXERCISES } from '../../models/exercises';
 import { Exercise } from 'src/app/models/exercise.model';
 import { Router } from '@angular/router';
+import { DatabaseService } from 'src/app/services/database/database.service';
 
 @Component({
   selector: 'app-home',
@@ -18,7 +19,7 @@ import { Router } from '@angular/router';
 })
 export class HomeComponent implements OnInit {
 
-  exercises: Exercise[] = EXERCISES;
+  exercises: Exercise[] = [];
   slides = [];
 
 
@@ -28,20 +29,15 @@ export class HomeComponent implements OnInit {
 
   @ViewChildren(NgbdSortableHeader) headers: QueryList<NgbdSortableHeader>;
 
-  constructor(public categoriesService: CategoriesService, private router:Router) {
+  constructor(public categoriesService: CategoriesService, private router: Router,
+    private db: DatabaseService) {
     this.categories$ = categoriesService.categories$;
     this.total$ = categoriesService.total$;
-    this.total$.subscribe(event => this.total = Array(event).fill(1).map((x,i)=>i+1));
+    this.total$.subscribe(event => this.total = Array(event).fill(1).map((x, i) => i + 1));
   }
 
   ngOnInit(): void {
-
-    let slide = Math.ceil(this.exercises.length / 3);
-    var mult = 0;
-    for (var i = 0; i < slide; i += 1) {
-      this.slides.push(mult);
-      mult += 3;
-    }
+    this.getLastTenExercises();
   }
 
   onSort({ column, direction }: SortEvent) {
@@ -56,7 +52,19 @@ export class HomeComponent implements OnInit {
     this.categoriesService.sortDirection = direction;
   }
 
-  getCategory(key: number){
+  getLastTenExercises() {
+    this.db.getLastTenExercises().subscribe((exercises) => {
+      this.exercises = exercises;
+      let slide = Math.ceil(this.exercises.length / 3);
+      var mult = 0;
+      for (var i = 0; i < slide; i += 1) {
+        this.slides.push(mult);
+        mult += 3;
+      }
+    })
+  }
+
+  getCategory(key: number) {
     this.router.navigate(['/category', key]);
   }
 

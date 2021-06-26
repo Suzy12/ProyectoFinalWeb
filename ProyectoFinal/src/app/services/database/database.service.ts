@@ -28,7 +28,7 @@ export class DatabaseService {
         let object = value.payload.val();
         object.key = value.key;
         return object;
-      }).slice(element.length - 11);
+      }).slice(element.length - 10);
     }));
   }
 
