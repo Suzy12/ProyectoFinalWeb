@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { UserModel } from '../../models/user.model'
 import { map } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
@@ -28,13 +29,13 @@ export class AuthService {
 
     //retorna el observable de http, con un pipe para guardar el token de una vez
     // en el local storage, que es el equivalente a estar logueado
+
     return this.http.post(
       `${this.url}/verifyPassword?key=${this.apikey}`,
       authData
     ).pipe(
       map(resp => {
         this.guardarToken(resp['idToken']); //guarda en LS
-        console.log(resp);
         this.guardarNombre(resp["displayName"]);
         return resp;
       })

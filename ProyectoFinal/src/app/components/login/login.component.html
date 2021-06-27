@@ -10,30 +10,35 @@
                             cuenta puedes
                             <a>Solicitar el Registro</a>
                         </p>
-                        <div class="input-group mb-3">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text">
-                                    <span class="fa fa-user"></span>
-                                </span>
+                        <form [formGroup]="loginForm" (ngSubmit)="login()" novalidate>
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">
+                                        <span class="fa fa-user"></span>
+                                    </span>
+                                </div>
+                                <input class="form-control" placeholder="Correo Electrónico" formControlName="email"
+                                    #email required [ngClass]="{ 'is-invalid': submitted && form.email.errors }">
                             </div>
-                            <input class="form-control" placeholder="Correo Electrónico">
-                        </div>
-                        <div class="input-group mb-3">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text">
-                                    <span class="fa fa-lock"></span>
-                                </span>
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">
+                                        <span class="fa fa-lock"></span>
+                                    </span>
+                                </div>
+                                <input class="form-control" placeholder="Contraseña" type="password"
+                                    formControlName="password" #password required
+                                    [ngClass]="{ 'is-invalid': submitted && form.password.errors }">
                             </div>
-                            <input class="form-control" placeholder="Contraseña" type="password">
-                        </div>
-                        <div class="row">
-                            <div class="col-lg-6 col-12">
-                                <button type="button" class="btn btn-fill">Iniciar Sesión</button>
+                            <div class="row">
+                                <div class="col-lg-6 col-12">
+                                    <button type="submit" class="btn btn-fill" [disabled]="loading">Iniciar Sesión</button>
+                                </div>
+                                <div class="col-lg-6 col-12 text-right">
+                                    <a>¿Olvidaste tu contraseña?</a>
+                                </div>
                             </div>
-                            <div class="col-lg-6 col-12 text-right">
-                                <a>¿Olvidaste tu contraseña?</a>
-                            </div>
-                        </div>
+                        </form>
                     </div>
                 </div>
                 <div class="card text-white py-5 d-md-down-none card-right">

@@ -9,13 +9,14 @@ import { HomeComponent } from './components/home/home.component';
 import { LoginComponent } from './components/login/login.component';
 import { SearchComponent } from './components/search/search.component';
 import { LoggedInGuard } from './guards/logged-in.guard';
+import { NotLoggedInGuard } from './guards/not-logged-in.guard';
 
 const routes: Routes = [
   //NOTE: el routing se pone el canActivate la lista de guards
   { path: 'home' , component: HomeComponent},
   { path: 'exercise/:key' , component: ExerciseComponent},
   { path: 'search' , component: SearchComponent},
-  { path: 'login' , component: LoginComponent},
+  { path: 'login' , component: LoginComponent, canActivate:[NotLoggedInGuard]},
   { path: 'category/:key' , component: CategoryComponent},
   { path: 'dashboard' , component: DashboardComponent, canActivate:[LoggedInGuard]},
   { path: 'create-category' , component: CreateCategoryComponent, canActivate:[LoggedInGuard]},
