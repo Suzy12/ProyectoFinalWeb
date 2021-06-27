@@ -2,13 +2,10 @@
 import { Component, QueryList, ViewChildren, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 
-import { Category } from '../../models/category.model';
+import { CategorySortable } from '../../models/category.model';
 import { CategoriesService } from '../../services/categories/categories.service';
 import { NgbdSortableHeader, SortEvent } from '../../directives/sortable.directive';
 
-
-import { EXERCISES } from '../../models/exercises';
-import { Exercise } from 'src/app/models/exercise.model';
 import { Router } from '@angular/router';
 import { DatabaseService } from 'src/app/services/database/database.service';
 
@@ -19,11 +16,12 @@ import { DatabaseService } from 'src/app/services/database/database.service';
 })
 export class HomeComponent implements OnInit {
 
-  exercises: Exercise[] = [];
+  exercises: any[] = [];
   slides = [];
+  levels : any[] = []
 
 
-  categories$: Observable<Category[]>;
+  categories$: Observable<CategorySortable[]>;
   total$: Observable<number>;
   total: number[] = [];
 
@@ -31,13 +29,12 @@ export class HomeComponent implements OnInit {
 
   constructor(public categoriesService: CategoriesService, private router: Router,
     private db: DatabaseService) {
-    this.categories$ = categoriesService.categories$;
-    this.total$ = categoriesService.total$;
-    this.total$.subscribe(event => this.total = Array(event).fill(1).map((x, i) => i + 1));
   }
 
   ngOnInit(): void {
     this.getLastTenExercises();
+    this.getExercisesLevels();
+    this.getCategoriesTable();
   }
 
   onSort({ column, direction }: SortEvent) {
@@ -55,14 +52,35 @@ export class HomeComponent implements OnInit {
   getLastTenExercises() {
     this.db.getLastTenExercises().subscribe((exercises) => {
       this.exercises = exercises;
-      let slide = Math.ceil(this.exercises.length / 3);
-      var mult = 0;
-      for (var i = 0; i < slide; i += 1) {
-        this.slides.push(mult);
-        mult += 3;
-      }
+      this.getSlidesCarousel();
     })
   }
+
+  getSlidesCarousel() {
+    /* Create 3 columns for carousel */
+    let slide = Math.ceil(this.exercises.length / 3);
+    var mult = 0;
+    for (var i = 0; i < slide; i += 1) {
+      this.slides.push(mult);
+      mult += 3;
+    }
+  }
+
+  getExercisesLevels(){
+    this.db.getCantStars().subscribe((levels)=>{
+      this.levels = levels;
+    });
+  }
+
+  getCategoriesTable(){
+    this.db.getCantOfTypes().subscribe((categories)=>{
+      this.categoriesService.setCategories(categories);
+      this.categories$ = this.categoriesService.categories$;
+      this.total$ = this.categoriesService.total$;
+    });
+  }
+
+
 
   getCategory(key: number) {
     this.router.navigate(['/category', key]);

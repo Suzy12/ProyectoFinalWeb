@@ -1,6 +1,6 @@
-export interface Category {
-    key?: number;
-    name: string;
-    details?: string;
-    count?: number;
+export interface CategorySortable {
+    key?: number,
+    name: string,
+    details?: string,
+    count?: number
 }

@@ -1,13 +1,9 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { FormGroup, FormControl, Validators, FormArray, FormBuilder } from '@angular/forms'
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FirebaseStorageService } from 'src/app/services/upload-files/upload.service';
-import { timer } from 'rxjs';
+import { ToastrService } from 'ngx-toastr';
 
-import { of } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
-import { HttpEventType, HttpErrorResponse } from '@angular/common/http';
-import { resolve } from '@angular/compiler-cli/src/ngtsc/file_system';
 import { DatabaseService } from 'src/app/services/database/database.service';
 
 
@@ -21,31 +17,43 @@ export class CreateCategoryComponent implements OnInit {
   loading: boolean;
   categoryForm: FormGroup;
   submitted = false;
-  @ViewChild("fileUpload", { static: false }) fileUpload: ElementRef;
-  files_to_upload = [];
+  modify = false;
 
-
-  public archivoForm = new FormGroup({
-    archivo: new FormControl(null, Validators.required),
-  });
-
-  public mensajeArchivo = 'No hay un archivo seleccionado';
-  public datosFormulario = new FormData();
-  public nombreArchivo = '';
-  public URLPublica = '';
-  public porcentaje = 0;
-  public finalizado = false;
-
+  files_to_remove = [];
+  category: any = {};
+  urls = [
+    {
+      name: "original.jpg",
+      url: "https://firebasestorage.googleapis.com/v0/b/proyecto-web-36a12.appspot.com/o/attached_files%2Fcategory0%2Foriginal.jpg?alt=media&token=78ecd13f-b6cd-4b70-9a73-2c4d38059a8b"
+    },
+    {
+      name: "original (1).jpg",
+      url: "https://firebasestorage.googleapis.com/v0/b/proyecto-web-36a12.appspot.com/o/attached_files%2Fcategory0%2Ftempsnip.png?alt=media&token=9271e1d3-a4fe-40b6-9f60-3953f6b18a1d"
+    }]
 
   constructor(private fb: FormBuilder, private router: Router,
     private firebaseStorage: FirebaseStorageService,
-    private db: DatabaseService) {
+    private db: DatabaseService,
+    private activatedRoute: ActivatedRoute,
+    private toastr: ToastrService) {
 
     this.categoryForm = this.fb.group({
       name: ['', [Validators.required]],
       details: ['', [Validators.required]],
       files: this.fb.array([]),
     });
+
+    if (this.router.getCurrentNavigation().extras.state) {
+      this.modify = true;
+      let key = this.router.getCurrentNavigation().extras.state;
+      this.db.getType(key).subscribe((category) => {
+        this.category = category;
+        this.categoryForm.get("name").setValue(this.category.name);
+        this.categoryForm.get("details").setValue(this.category.details);
+        this.categoryForm.setControl('files', this.fb.array(this.urls || []));
+
+      })
+    }
 
     this.loading = false;
   }
@@ -71,7 +79,9 @@ export class CreateCategoryComponent implements OnInit {
   }
 
   removeFile(i: number) {
+    this.files_to_remove.push(this.files().at(i).value);
     this.files().removeAt(i);
+    console.log(this.files_to_remove)
   }
 
   onFileInput(event, i): void {
@@ -81,42 +91,61 @@ export class CreateCategoryComponent implements OnInit {
   }
 
 
-  saveExercise() {
+  save() {
+    if (!this.categoryForm.touched) {
+      this.toastr.warning("No se realizaron cambios", 'La categoría no fue modificada', { timeOut: 5000 });
+      return;
+    }
     this.loading = true;
     this.submitted = true;
     if (this.categoryForm.invalid) {
+      this.toastr.warning("Debe completar todos los campos", 'Error', { timeOut: 5000 });
       this.loading = false;
       return;
     }
-    this.uploadFiles();
-    this.submitted = false;
+    this.insertCategory();
   }
 
   return() {
+
+    document.getElementById("returnModal").click();
     this.router.navigate(['/dashboard'])
   }
 
+  insertCategory() {
+    let key : any;
+    let category = this.categoryForm.getRawValue();
+    if (this.modify) {
+      key = category.key;
+      this.db.updateType(this.categoryForm.getRawValue());
+    } else {
+      key = this.db.insertType(this.categoryForm.getRawValue());
+    }
+    console.log(key);
+    //this.uploadFiles(key);
+  }
+
   //Upload files to cloud storage
-  uploadFiles() {
+  uploadFiles(key: any) {
     let all_files = this.files();
-    this.db.getCantTypes().subscribe((count) => {
-      all_files.value.forEach((file, index) => {
-        let file_uploaded = this.firebaseStorage.uploadCloudStorage("category"+count, file.name, file.data.get('archivo'));
-        file_uploaded.then(() => {
-          let reference = this.firebaseStorage.referenceCloudStorage("category"+count, file.name);
-          reference.getDownloadURL().subscribe((URL) => {
-            file.url = URL;
-            if (index == all_files.length - 1) {
-              this.loading = false;
-            }
-          });
+    let count_items_uploaded = 0;
+
+    this.firebaseStorage.deleteFiles(this.files_to_remove);
+
+    all_files.value.forEach((file) => {
+      let file_uploaded = this.firebaseStorage.uploadCloudStorage("category" + key, file.name, file.data.get('archivo'));
+      file_uploaded.then(() => {
+        let reference = this.firebaseStorage.referenceCloudStorage("category" + key, file.name);
+        reference.getDownloadURL().subscribe((URL) => {
+          file.url = URL;
+          count_items_uploaded++;
+          if (count_items_uploaded == all_files.length) {
+            this.loading = false;
+            this.submitted = false;
+          }
         });
-      })
+      });
     });
   }
 
-  createCategory(){
-    
-  }
-  
 }

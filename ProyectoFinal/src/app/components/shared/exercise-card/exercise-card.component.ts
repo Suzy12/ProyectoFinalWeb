@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { DatabaseService } from 'src/app/services/database/database.service';
 
 @Component({
   selector: 'app-exercise-card',
@@ -11,10 +12,17 @@ export class ExerciseCardComponent implements OnInit {
   @Input() exercise: any = {};
   @Input() index: any = {};
 
-  constructor( private router:Router) {
+  constructor( private router:Router, 
+    private db: DatabaseService) {
   }
 
   ngOnInit(): void {
+  }
+
+  getType(){
+    this.db.searchType(this.exercise.section).subscribe((category)=>{
+      this.router.navigate(['/category', category.key]);
+    })
   }
 
   getExercise(){

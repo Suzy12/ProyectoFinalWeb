@@ -2,13 +2,13 @@ import { Injectable, PipeTransform } from '@angular/core';
 
 import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
 
-import { CategorySortable } from '../../models/category.model';
+import { ExerciseSortable } from '../../models/exercise.model';
 import { DecimalPipe } from '@angular/common';
 import { debounceTime, delay, switchMap, tap } from 'rxjs/operators';
 import { SortColumn, SortDirection } from '../../directives/sortable.directive';
 
 interface SearchResult {
-  categories: CategorySortable[];
+  exercises: ExerciseSortable[];
   total: number;
 };
 
@@ -22,30 +22,33 @@ interface State {
 
 const compare = (v1: string | number, v2: string | number) => v1 < v2 ? -1 : v1 > v2 ? 1 : 0;
 
-function sort(categories: CategorySortable[], column: SortColumn, direction: string): CategorySortable[] {
+function sort(exercises: ExerciseSortable[], column: SortColumn, direction: string): ExerciseSortable[] {
   if (direction === '' || column === '') {
-    return categories;
+    return exercises;
   } else {
-    return [...categories].sort((a, b) => {
+    return [...exercises].sort((a, b) => {
       const res = compare(a[column], b[column]);
       return direction === 'asc' ? res : -res;
     });
   }
 }
 
-function matches(category: CategorySortable, term: string, pipe: PipeTransform) {
-  return category.name.toLowerCase().includes(term.toLowerCase())
-    /*|| category.details ? pipe.transform(category.details).includes(term) */
-    || pipe.transform(category.count).includes(term);
+function matches(exercise: ExerciseSortable, term: string, pipe: PipeTransform) {
+  return exercise.name.toLowerCase().includes(term.toLowerCase())
+    || pipe.transform(exercise.level).includes(term)
+    || pipe.transform(exercise.creator).includes(term)
+    || pipe.transform(exercise.section).includes(term)
+    || pipe.transform(exercise.call).includes(term)
+    || pipe.transform(exercise.created).includes(term);
 }
 
 @Injectable({ providedIn: 'root' })
-export class CategoriesService {
+export class ExercisesService {
   private _loading$ = new BehaviorSubject<boolean>(true);
   private _search$ = new Subject<void>();
-  private _categories$ = new BehaviorSubject<CategorySortable[]>([]);
+  private _exercises$ = new BehaviorSubject<ExerciseSortable[]>([]);
   private _total$ = new BehaviorSubject<number>(0);
-  private CATEGORIES: CategorySortable[] = [];
+  private EXERCISES: ExerciseSortable[] = [];
 
   private _state: State = {
     page: 1,
@@ -66,13 +69,13 @@ export class CategoriesService {
       delay(200),
       tap(() => this._loading$.next(false))
     ).subscribe(result => {
-      this._categories$.next(result.categories);
+      this._exercises$.next(result.exercises);
       this._total$.next(result.total);
     });
     this._search$.next();
   }
 
-  get categories$() { return this._categories$.asObservable(); }
+  get exercises$() { return this._exercises$.asObservable(); }
   get total$() { return this._total$.asObservable(); }
   get loading$() { return this._loading$.asObservable(); }
   get page() { return this._state.page; }
@@ -94,23 +97,23 @@ export class CategoriesService {
     const { sortColumn, sortDirection, pageSize, page, searchTerm } = this._state;
 
     // 1. sort
-    let categories = sort(this.CATEGORIES, sortColumn, sortDirection);
+    let exercises = sort(this.EXERCISES, sortColumn, sortDirection);
 
     // 2. filter
-    categories = categories.filter(category => matches(category, searchTerm, this.pipe));
-    const total = categories.length;
+    exercises = exercises.filter(category => matches(category, searchTerm, this.pipe));
+    const total = exercises.length;
 
     // 3. paginate
-    categories = categories.slice((page - 1) * pageSize, (page - 1) * pageSize + pageSize);
-    return of({ categories, total });
+    exercises = exercises.slice((page - 1) * pageSize, (page - 1) * pageSize + pageSize);
+    return of({ exercises, total });
   }
 
-  getCategory(key: number): CategorySortable {
-    return this.CATEGORIES[key];
+  getCategory(key: number): ExerciseSortable {
+    return this.EXERCISES[key];
   }
 
-  setCategories(categories: CategorySortable[]) {
-    this.CATEGORIES = categories;
+  setExercises(exercises: ExerciseSortable[]) {
+    this.EXERCISES = exercises;
     this.initializeTable();
   }
 }

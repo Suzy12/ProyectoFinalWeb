@@ -4,6 +4,10 @@
     transition: all 0.3s ease-out;
 }
 
+.container-top{
+    padding-top: 5%;
+}
+
 :root {
     --blue-background: rgb(0, 153, 204, 0.25);
     --blue-button: rgb(0, 153, 204, 0.8);

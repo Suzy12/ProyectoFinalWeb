@@ -1,5 +1,5 @@
 <section class="home_banner_area">
-    <div class="container">
+    <div class="container container-top">
         <div class="row">
             <div class="col-12 text-center">
                 <h2 class="mb-3 font-weight-bold">Busca cualquier ejercicio en la plataforma</h2>
@@ -12,20 +12,20 @@
             <div class="col-lg-12 card-margin">
                 <div class="card search-form">
                     <div class="card-body p-0">
-                        <form id="search-form">
+                        <form [formGroup]="searchForm" (ngSubmit)="search()">
                             <div class="row">
                                 <div class="col-12">
                                     <div class="row no-gutters">
                                         <div class="col-lg-3 col-md-3 col-sm-12 p-0">
-                                            <select class="form-control" id="exampleFormControlSelect1">
-                                                <option>Nombre</option>
+                                            <select class="form-control" id="type" name="type" formControlName="type" >
+                                                <option selected>Nombre</option>
                                                 <option>Categoría</option>
                                                 <option>Descripción</option>
                                             </select>
                                         </div>
                                         <div class="col-lg-8 col-md-6 col-sm-12 p-0">
                                             <input type="text" placeholder="Buscar..." class="form-control" id="search"
-                                                name="search">
+                                                name="search" formControlName="search" >
                                         </div>
                                         <div class="col-lg-1 col-md-3 col-sm-12 p-0">
                                             <button type="submit" class="btn btn-base">
@@ -50,13 +50,13 @@
                     <div class="carousel-inner" id="carouselExercises">
                         <div *ngFor="let num of slides" [ngClass]="{'active': num == 0}" class="carousel-item">
                             <div class="row text-center">
-                                <div class="col-lg-4 mt-5">
+                                <div class="col-lg-4 mt-5 animated fadeIn fast">
                                     <app-exercise-card [exercise] = "exercises[num]" [index] = "num"></app-exercise-card>
                                 </div>
-                                <div *ngIf = "exercises[num+1]" class="col-lg-4 mt-5">
+                                <div *ngIf = "exercises[num+1]" class="col-lg-4 mt-5 animated fadeIn fast">
                                     <app-exercise-card [exercise] = "exercises[num+1]" [index] = "num+1"></app-exercise-card>
                                 </div>
-                                <div *ngIf = "exercises[num+2]" class="col-lg-4 mt-5">
+                                <div *ngIf = "exercises[num+2]" class="col-lg-4 mt-5 animated fadeIn fast">
                                     <app-exercise-card [exercise] = "exercises[num+2]" [index] = "num+2"></app-exercise-card>
                                 </div>
                             </div>
@@ -65,7 +65,7 @@
                 </div>
             </div>
         </div>
-        <div class="row mt-5 mb-5">
+        <div class="row mt-5 mb-5 pt-5">
             <div class="col-12 text-center">
                 <a class="mb-3 mr-1 arrows-btn" href="#carouselExampleIndicators2" role="button" data-slide="prev">
                     <i class="fas fa-chevron-circle-left fa-2x"></i>

@@ -1,7 +1,5 @@
 import { Injectable } from '@angular/core';
 import { AngularFireDatabase } from '@angular/fire/database';
-import { type } from 'os';
-import { element } from 'protractor';
 import { map } from 'rxjs/operators';
 
 @Injectable({
@@ -50,7 +48,7 @@ export class DatabaseService {
     }));
   }
 
-  getType(id: string) {
+  getType(id: any) {
     return this.db.object('types/' + id).snapshotChanges().pipe(map((element: any) => {
       let object = element.payload.val();
       object.key = element.key;
@@ -58,11 +56,63 @@ export class DatabaseService {
     }))
   }
 
+  insertType(type: any) {
+    let base = this.db.database.ref('/');
+    let pusher = base.child("types").push();
+    let key = pusher.key;
+    pusher.set(type);
+    this.updateNumTypes(1);
+    return key
+  }
+
+  updateNumTypes(value: number) {
+    this.db.database.ref("metadata").once("value", (count) => {
+      let updates = {}
+      updates["num_types"] = count.val().num_types + value;
+      return this.db.database.ref("metadata").update(updates);
+    });
+  }
+
+  updateType(value: any) {
+    let key = value.key;
+    delete value.key;
+    let updates = {}
+    updates[key] = value;
+    return this.db.database.ref("types").update(updates);
+  }
+
+  deleteType(key: string) {
+    this.db.database.ref("types/" + key).get().then((types: any) => {
+      let name = types.val().name;
+      this.db.database.ref("exercises").get().then((exercises: any) => {
+        let exerciseDB = this.db.list("exercises");
+        let updateNum = 0;
+        exercises.forEach((element: any) => {
+          if (element.val().section === name) {
+            exerciseDB.remove(element.key);
+            updateNum--;
+          };
+        });
+        this.updateNumExercises(updateNum);
+      });
+    }).finally(() => {
+      this.db.list("/types").remove(key);
+      return this.updateNumTypes(-1);
+    });
+  }
+
   insertExercise(exercise: any) {
     let base = this.db.database.ref('/');
     let pusher = base.child("exercises").push();
+    let key = pusher.key;
+    exercise.num_reviews = 0;
+    exercise.level = 1;
+    exercise.code = key
+    const d = new Date()
+    exercise.created = new Date(d.getTime() - d.getTimezoneOffset() * 60 * 1000).toISOString().split('T')[0]
     pusher.set(exercise);
-    return this.updateNumExercises(1);
+    this.updateNumExercises(1)
+    return key;
   }
 
   updateNumExercises(value: number) {
@@ -111,13 +161,22 @@ export class DatabaseService {
 
   //Get amount of every type in the database
   getCantOfTypes() {
-    return this.db.object('/').valueChanges().pipe(map((element: any) => {
-      let listaTipos = element.types.map((value: any) => { return { name: value.name, cant: 0 } })
-      let exercises = element.exercises
-      exercises.forEach((exercise: any) => {
-        let temp = listaTipos.find((tipo: any) => tipo.name === exercise.section);
-        if (temp) temp.cant++;
+    return this.db.list('/').snapshotChanges().pipe(map((element: any) => {
+      let listaTipos = element[2].payload.val().map((value: any) => { return { name: value.name, count: 0 } })
+      let listaLlaves = []
+      element[2].payload.forEach((element: any) => {
+        listaLlaves.push(element.key);
       });
+      listaTipos.forEach((element: any, index: number) => {
+        element.key = listaLlaves[index];
+      });
+      let exercises = element[0].payload.val();
+      if (exercises.length) {
+        exercises.forEach((exercise: any) => {
+          let temp = listaTipos.find((tipo: any) => tipo.name === exercise.section);
+          if (temp) temp.count++;
+        });
+      }
       return listaTipos
     }));
   }
@@ -175,6 +234,17 @@ export class DatabaseService {
     }));
   }
 
+  searchType(term: string) {
+    return this.db.list('types').snapshotChanges().pipe(map((element: any) => {
+      let type = element.filter((exercise: any) => exercise.payload.val().name == term);
+      return type.map((value: any) => {
+        let object = value.payload.val();
+        object.key = value.key;
+        return object;
+      })[0];
+    }));
+  }
+
   updateStarRating(key: string, stars: number) {
     return this.db.database.ref('exercises/' + key).get().then((element: any) => {
       element = element.val()
@@ -188,6 +258,6 @@ export class DatabaseService {
       updates[key + "/level"] = '' + stars;
       updates[key + "/num_reviews"] = '' + (reviews + 1);
       this.db.database.ref("exercises").update(updates);
-    }).finally( () => stars)
+    }).finally(() => stars)
   }
 }

@@ -99,8 +99,6 @@ export class CreateExerciseComponent implements OnInit {
   onFileInput(file: FileList | null, i): void {
     let f = this.files().at(i);
     f.value.name = file[0].name;
-    console.log(f)
-    console.log(file);
   }
 
 
@@ -109,7 +107,6 @@ export class CreateExerciseComponent implements OnInit {
     if (this.productForm.invalid) {
       return;
     }
-    console.log(this.productForm.value);
     this.submitted = false
   }
 

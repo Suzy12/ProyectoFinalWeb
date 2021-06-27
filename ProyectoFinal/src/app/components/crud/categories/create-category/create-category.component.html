@@ -1,5 +1,5 @@
-<div class="container mt-5">
-    <form [formGroup]="categoryForm" (ngSubmit)="saveExercise()" novalidate>
+<div class="container mt-5 container-top">
+    <form [formGroup]="categoryForm" (ngSubmit)="save()" novalidate>
 
         <div class="row">
             <div class="col-lg-6 col-12">
@@ -45,7 +45,8 @@
                     </tr>
                     <tr *ngFor="let file of files().controls; let i=index" [formGroupName]="i">
                         <td>
-                            <input type="file" #fileInput (change)="onFileInput($event, i)" />
+                            <p>{{this.categoryForm.value.files[i].name}}</p>
+                            <input *ngIf="this.categoryForm.value.files[i].name == ''" type="file" #fileInput (change)="onFileInput($event, i)" />
                         </td>
                         <td>
                             <button (click)="removeFile(i)" class="btn btn-outline-danger"><i
