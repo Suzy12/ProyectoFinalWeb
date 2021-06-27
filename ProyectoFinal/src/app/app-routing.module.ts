@@ -8,6 +8,7 @@ import { ExerciseComponent } from './components/exercise/exercise.component';
 import { HomeComponent } from './components/home/home.component';
 import { LoginComponent } from './components/login/login.component';
 import { SearchComponent } from './components/search/search.component';
+import { LoggedInGuard } from './guards/logged-in.guard';
 
 const routes: Routes = [
   //NOTE: el routing se pone el canActivate la lista de guards
@@ -16,10 +17,10 @@ const routes: Routes = [
   { path: 'search' , component: SearchComponent},
   { path: 'login' , component: LoginComponent},
   { path: 'category/:key' , component: CategoryComponent},
-  { path: 'dashboard' , component: DashboardComponent},
-  { path: 'create-category' , component: CreateCategoryComponent},
-  { path: 'create-exercise' , component: CreateExerciseComponent},
-  { path: '**', redirectTo: 'home' }
+  { path: 'dashboard' , component: DashboardComponent, canActivate:[LoggedInGuard]},
+  { path: 'create-category' , component: CreateCategoryComponent, canActivate:[LoggedInGuard]},
+  { path: 'create-exercise' , component: CreateExerciseComponent, canActivate:[LoggedInGuard]},
+  { path: '**', pathMatch:"full",redirectTo: 'home' }
 ];
 
 @NgModule({
