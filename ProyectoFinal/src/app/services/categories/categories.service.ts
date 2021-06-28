@@ -35,7 +35,6 @@ function sort(categories: CategorySortable[], column: SortColumn, direction: str
 
 function matches(category: CategorySortable, term: string, pipe: PipeTransform) {
   return category.name.toLowerCase().includes(term.toLowerCase())
-    /*|| category.details ? pipe.transform(category.details).includes(term) */
     || pipe.transform(category.count).includes(term);
 }
 

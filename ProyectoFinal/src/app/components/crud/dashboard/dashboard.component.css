@@ -27,5 +27,11 @@ small {
     font-weight: 300;
 }
 
+.container-info{
+    margin-top: 5%;
+    margin-left: 5%;
+    margin-right: 5%;
+}
+
 
 /*Reference: https://www.bootdey.com/snippets/view/panel-dashboard-widget#html*/

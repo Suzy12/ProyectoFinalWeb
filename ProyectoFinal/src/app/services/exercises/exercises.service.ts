@@ -35,11 +35,10 @@ function sort(exercises: ExerciseSortable[], column: SortColumn, direction: stri
 
 function matches(exercise: ExerciseSortable, term: string, pipe: PipeTransform) {
   return exercise.name.toLowerCase().includes(term.toLowerCase())
-    || pipe.transform(exercise.level).includes(term)
-    || pipe.transform(exercise.creator).includes(term)
-    || pipe.transform(exercise.section).includes(term)
-    || pipe.transform(exercise.call).includes(term)
-    || pipe.transform(exercise.created).includes(term);
+    || exercise.section.toLowerCase().includes(term.toLowerCase())
+    || ("nivel " + exercise.level).includes(term.toLowerCase())
+    || exercise.creator.toLowerCase().includes(term.toLowerCase())
+    || exercise.created.toLowerCase().includes(term.toLowerCase())
 }
 
 @Injectable({ providedIn: 'root' })
@@ -100,7 +99,7 @@ export class ExercisesService {
     let exercises = sort(this.EXERCISES, sortColumn, sortDirection);
 
     // 2. filter
-    exercises = exercises.filter(category => matches(category, searchTerm, this.pipe));
+    exercises = exercises.filter(exercise => matches(exercise, searchTerm, this.pipe));
     const total = exercises.length;
 
     // 3. paginate
@@ -108,7 +107,7 @@ export class ExercisesService {
     return of({ exercises, total });
   }
 
-  getCategory(key: number): ExerciseSortable {
+  getExercise(key: number): ExerciseSortable {
     return this.EXERCISES[key];
   }
 

@@ -3,6 +3,7 @@ import { HighlightService } from 'src/app/services/highlight/highlight.service';
 import { NgbRatingConfig } from '@ng-bootstrap/ng-bootstrap';
 import { Router } from '@angular/router';
 import { DatabaseService } from 'src/app/services/database/database.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-exercise',
@@ -28,7 +29,8 @@ export class ExerciseComponent implements OnInit {
 
 
   constructor(private highlightService: HighlightService, config: NgbRatingConfig, private router: Router,
-    private db: DatabaseService) {
+    private db: DatabaseService,
+    private toastr: ToastrService) {
     config.max = 5;
     if (this.router.getCurrentNavigation().extras.state) {
       this.exercise = this.router.getCurrentNavigation().extras.state;
@@ -55,7 +57,10 @@ export class ExerciseComponent implements OnInit {
   }
 
   rateExercise(){
-    this.db.updateStarRating(this.exercise.key, this.currentRate);
+    this.db.updateStarRating(this.exercise.key, this.currentRate)
+    .then((msg)=>{this.toastr.success("Éxito", msg, { timeOut: 2000 });})
+    .catch((msg)=>{this.toastr.success("Error", msg, { timeOut: 2000 });});
+    
   }
 
 }

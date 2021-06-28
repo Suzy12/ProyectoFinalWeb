@@ -16,8 +16,8 @@ export class CreateCategoryComponent implements OnInit {
 
   loading: boolean;
   categoryForm: FormGroup;
-  submitted = false;
-  modify = false;
+  submitted: boolean;
+  modify: boolean = false;
 
   files_to_remove = [];
   category: any = {};
@@ -34,7 +34,6 @@ export class CreateCategoryComponent implements OnInit {
   constructor(private fb: FormBuilder, private router: Router,
     private firebaseStorage: FirebaseStorageService,
     private db: DatabaseService,
-    private activatedRoute: ActivatedRoute,
     private toastr: ToastrService) {
 
     this.categoryForm = this.fb.group({
@@ -50,11 +49,11 @@ export class CreateCategoryComponent implements OnInit {
         this.category = category;
         this.categoryForm.get("name").setValue(this.category.name);
         this.categoryForm.get("details").setValue(this.category.details);
-        this.categoryForm.setControl('files', this.fb.array(this.urls || []));
+        this.categoryForm.setControl('files', this.fb.array(this.category.files || []));
 
       })
     }
-
+    this.submitted = false;
     this.loading = false;
   }
 
@@ -79,7 +78,9 @@ export class CreateCategoryComponent implements OnInit {
   }
 
   removeFile(i: number) {
-    this.files_to_remove.push(this.files().at(i).value);
+    if (this.modify && this.files().at(i).value.url != '') {
+      this.files_to_remove.push(this.files().at(i).value);
+    }
     this.files().removeAt(i);
     console.log(this.files_to_remove)
   }
@@ -89,6 +90,13 @@ export class CreateCategoryComponent implements OnInit {
     f.value.name = event.target.files[0].name;
     f.value.data.append('archivo', event.target.files[0], event.target.files[0].name);
   }
+
+  return() {
+
+    document.getElementById("returnModal").click();
+    this.router.navigate(['/dashboard'])
+  }
+
 
 
   save() {
@@ -106,20 +114,15 @@ export class CreateCategoryComponent implements OnInit {
     this.insertCategory();
   }
 
-  return() {
-
-    document.getElementById("returnModal").click();
-    this.router.navigate(['/dashboard'])
-  }
-
   insertCategory() {
-    let key : any;
+    let key: any;
     let category = this.categoryForm.getRawValue();
     if (this.modify) {
+      console.log("Hola");
       key = category.key;
-      this.db.updateType(this.categoryForm.getRawValue());
+      this.db.updateType(category);
     } else {
-      key = this.db.insertType(this.categoryForm.getRawValue());
+      key = this.db.insertType(category);
     }
     console.log(key);
     //this.uploadFiles(key);

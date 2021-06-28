@@ -28,7 +28,12 @@ export class LoginComponent implements OnInit {
   }
   get form() { return this.loginForm.controls }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {
+    if(localStorage.getItem("redirected") == 'true'){
+      this.toastr.error("Acceso denegado", "Por favor inicie sesión para tener acceso a esta página", { timeOut: 3000 });
+      localStorage.removeItem("redirected");
+    }
+  }
 
   login() {
     this.loading = true
@@ -55,21 +60,22 @@ export class LoginComponent implements OnInit {
     let value = this.loginForm.value;
     value.displayName = '';
     this.auth.login(value).subscribe((value: any) => {
-      this.return();
+      this.toastr.success(`Bienvenido`, 'Usuario autenticado', { timeOut: 2000 });
+      this.enter();
     }, (error: any) => {
       if (error.error.error.message === "EMAIL_NOT_FOUND") {
         this.toastr.error("Correo desconocido", 'El correo ingresado no es parte de una cuenta', { timeOut: 2000 });
-        this.form.email.setErrors({incorrect: true});
+        this.form.email.setErrors({ incorrect: true });
       } else {
         this.toastr.error("Contraseña incorrecta", 'La contraseña ingresada es incorrecta', { timeOut: 2000 });
-        this.form.password.setErrors({incorrect: true});
+        this.form.password.setErrors({ incorrect: true });
       }
       this.loading = false;
     })
 
   }
 
-  return() {
+  enter() {
     this.router.navigate(['/dashboard'])
   }
 

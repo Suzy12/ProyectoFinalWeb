@@ -18,9 +18,9 @@ export class LoggedInGuard implements CanActivate {
     if (this.log.estaAutenticado()){
       return true;
     }else{
+      localStorage.setItem('redirected', 'true');
       localStorage.removeItem('token');
-      this.toastr.error("Por favor inicie sesión para tener acceso a esta página");
-      this.router.navigate(["login"]);
+      window.location.href = "/login";
       return false;
     }
   }

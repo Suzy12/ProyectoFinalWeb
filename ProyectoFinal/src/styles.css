@@ -4,7 +4,12 @@
     transition: all 0.3s ease-out;
 }
 
-.container-top{
+.img-nav {
+    width: 10%;
+    height: auto;
+}
+
+.container-top {
     padding-top: 5%;
 }
 

@@ -146,3 +146,7 @@
     max-width: 1000px;
     margin: auto;
 }
+
+.headers th {
+    cursor: pointer;
+}

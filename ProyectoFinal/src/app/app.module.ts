@@ -26,6 +26,7 @@ import { AngularFireModule } from '@angular/fire';
 import { AngularFireDatabaseModule } from '@angular/fire/database';
 import { environment } from '../environments/environment';
 import { HttpClientModule } from '@angular/common/http';
+import { NavbarLoggedInComponent } from './components/shared/navbar-logged-in/navbar-logged-in.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -40,7 +41,8 @@ import { HttpClientModule } from '@angular/common/http';
     CategoryComponent,
     CreateExerciseComponent,
     CreateCategoryComponent,
-    DashboardComponent
+    DashboardComponent,
+    NavbarLoggedInComponent
   ],
   imports: [
     BrowserModule,

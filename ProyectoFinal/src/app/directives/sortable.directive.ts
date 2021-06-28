@@ -1,9 +1,9 @@
-import {Directive, EventEmitter, Input, Output} from '@angular/core';
-import {CategorySortable} from '../models/category.model';
+import { Directive, EventEmitter, Input, Output } from '@angular/core';
 
-export type SortColumn = keyof CategorySortable | '';
+export type SortColumn = keyof 'string' | 'number' | '';
 export type SortDirection = 'asc' | 'desc' | '';
-const rotate: {[key: string]: SortDirection} = { 'asc': 'desc', 'desc': '', '': 'asc' };
+const rotate: { [key: string]: SortDirection } = { 'asc': 'desc', 'desc': '', '': 'asc' };
+
 
 export interface SortEvent {
   column: SortColumn;
@@ -26,6 +26,6 @@ export class NgbdSortableHeader {
 
   rotate() {
     this.direction = rotate[this.direction];
-    this.sort.emit({column: this.sortable, direction: this.direction});
+    this.sort.emit({ column: this.sortable, direction: this.direction });
   }
 }

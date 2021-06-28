@@ -252,12 +252,13 @@ export class DatabaseService {
       let reviews = 0;
       if (element.num_reviews) {
         reviews = parseInt(element.num_reviews);
-        console.log("reviews: " + reviews);
         stars = Math.ceil(((element.level * reviews + stars) / (reviews + 1)))
       }
       updates[key + "/level"] = '' + stars;
       updates[key + "/num_reviews"] = '' + (reviews + 1);
       this.db.database.ref("exercises").update(updates);
-    }).finally(() => stars)
+    })
+    .then(() => {return "El ejercicio fue calificado exitosamente"})
+    .catch(() => {return "Hubo un error, intente de nuevo"})
   }
 }

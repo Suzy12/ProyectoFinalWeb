@@ -37,18 +37,6 @@ export class HomeComponent implements OnInit {
     this.getCategoriesTable();
   }
 
-  onSort({ column, direction }: SortEvent) {
-    // resetting other headers
-    this.headers.forEach(header => {
-      if (header.sortable !== column) {
-        header.direction = '';
-      }
-    });
-
-    this.categoriesService.sortColumn = column;
-    this.categoriesService.sortDirection = direction;
-  }
-
   getLastTenExercises() {
     this.db.getLastTenExercises().subscribe((exercises) => {
       this.exercises = exercises;

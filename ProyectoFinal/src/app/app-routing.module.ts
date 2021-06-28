@@ -20,8 +20,8 @@ const routes: Routes = [
   { path: 'category/:key' , component: CategoryComponent},
   { path: 'dashboard' , component: DashboardComponent, canActivate:[LoggedInGuard]},
   { path: 'create-category' , component: CreateCategoryComponent, canActivate:[LoggedInGuard]},
-  { path: 'create-exercise' , component: CreateExerciseComponent, canActivate:[LoggedInGuard]},
-  { path: '**', pathMatch:"full",redirectTo: 'home' }
+  { path: 'create-exercise' , component: CreateExerciseComponent, canActivate:[LoggedInGuard] },
+  { path: '**', pathMatch: "full", redirectTo: 'home' }
 ];
 
 @NgModule({

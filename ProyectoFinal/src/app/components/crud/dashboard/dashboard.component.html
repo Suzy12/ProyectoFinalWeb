@@ -35,7 +35,7 @@
         </div>
     </div>
 </div>
-<div class="container mb-5 pb-5">
+<div class="container-info mb-5 pb-5">
     <div class="row">
         <div class="col-md-3 col-12">
             <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
@@ -60,54 +60,69 @@
                             </div>
                         </div>
                     </div>
-                    <!--<div class="row">
+                    <div class="row">
                         <div class="col-12">
                             <form>
                                 <div class="form-group form-inline">
                                     Buscar: <input class="form-control ml-2" type="text" name="searchTerm"
-                                        [(ngModel)]="categoriesService.searchTerm" />
-                                    <span class="ml-3" *ngIf="categoriesService.loading$ | async">Loading...</span>
+                                        [(ngModel)]="exercisesService.searchTerm" />
+                                    <span class="ml-3" *ngIf="exercisesService.loading$ | async">Loading...</span>
                                 </div>
                                 <table class="table table-striped">
                                     <thead>
                                         <tr class="text-center">
                                             <th scope="col">#</th>
-                                            <th scope="col" sortable="name" (sort)="onSort($event)">Country</th>
-                                            <th scope="col" sortable="area" (sort)="onSort($event)">Area</th>
-                                            <th scope="col" sortable="population" (sort)="onSort($event)">Population
+                                            <th scope="col">Nombre</th>
+                                            <th scope="col">Categoría
                                             </th>
+                                            <th scope="col">Creador
+                                            </th>
+                                            <th scope="col">Fecha
+                                            </th>
+                                            <th scope="col">Nivel</th>
                                             <th scope="col">Acción</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr *ngFor="let country of countries$ | async" class="text-center">
-                                            <th scope="row">{{ country.id }}</th>
+                                        <tr *ngFor="let exercise of exercises$ | async" class="text-center">
+                                            <th scope="row">{{ exercise.key }}</th>
                                             <td>
-                                                <img [src]="'https://upload.wikimedia.org/wikipedia/commons/' + country.flag"
-                                                    class="mr-2" style="width: 20px">
-                                                <ngb-highlight [result]="country.name"
-                                                    [term]="categoriesService.searchTerm">
+                                                <ngb-highlight [result]="exercise.name"
+                                                    [term]="exercisesService.searchTerm">
                                                 </ngb-highlight>
                                             </td>
                                             <td>
-                                                <ngb-highlight [result]="country.area | number"
-                                                    [term]="categoriesService.searchTerm">
+                                                <ngb-highlight [result]="exercise.section"
+                                                    [term]="exercisesService.searchTerm">
                                                 </ngb-highlight>
                                             </td>
                                             <td>
-                                                <ngb-highlight [result]="country.population | number"
-                                                    [term]="categoriesService.searchTerm">
+                                                <ngb-highlight [result]="exercise.creator"
+                                                    [term]="exercisesService.searchTerm">
                                                 </ngb-highlight>
                                             </td>
                                             <td>
-                                                <a class="btn btn-outline-info mr-1">
+                                                <ngb-highlight [result]="exercise.created"
+                                                    [term]="exercisesService.searchTerm">
+                                                </ngb-highlight>
+                                            </td>
+                                            <td>
+                                                <ngb-highlight [result]="'Nivel ' + exercise.level"
+                                                    [term]="exercisesService.searchTerm">
+                                                </ngb-highlight>
+                                            </td>
+                                            <td>
+                                                <a class="btn btn-outline-info mr-1"
+                                                    (click)="getExercise(exercise.key)">
                                                     <i class="fas fa-eye"></i>
                                                 </a>
-                                                <a class="btn btn-outline-success mr-1">
+                                                <a class="btn btn-outline-success mr-1"
+                                                    (click)="modifyExercise(exercise.key)">
                                                     <i class="fas fa-edit"></i>
                                                 </a>
                                                 <a class="btn btn-outline-danger" data-toggle="modal"
-                                                    data-target="#deleteModal">
+                                                    data-target="#deleteExerciseModal"
+                                                    (click)="setDeleteExercise(exercise.key)">
                                                     <i class="fas fa-trash"></i>
                                                 </a>
                                             </td>
@@ -116,12 +131,13 @@
                                 </table>
 
                                 <div class="d-flex justify-content-between p-2">
-                                    <ngb-pagination [collectionSize]="(total$ | async)!"
-                                        [(page)]="categoriesService.page" [pageSize]="categoriesService.pageSize">
+                                    <ngb-pagination [collectionSize]="(total_exercises$ | async)!" [maxSize]="5"
+                                        [rotate]="true" [ellipses]="false" [boundaryLinks]="true"
+                                        [(page)]="exercisesService.page" [pageSize]="exercisesService.pageSize">
                                     </ngb-pagination>
 
                                     <select class="custom-select" style="width: auto" name="pageSize"
-                                        [(ngModel)]="categoriesService.pageSize">
+                                        [(ngModel)]="exercisesService.pageSize">
                                         <option [ngValue]="2">Mostrar 2 ítems</option>
                                         <option [ngValue]="4">Mostrar 4 ítems</option>
                                         <option [ngValue]="6">Mostrar 6 ítems</option>
@@ -130,7 +146,7 @@
 
                             </form>
                         </div>
-                    </div>-->
+                    </div>
                 </div>
                 <div class="tab-pane fade mt-3" id="v-pills-categories" role="tabpanel"
                     aria-labelledby="v-pills-categories-tab">
@@ -157,8 +173,8 @@
                                         <thead>
                                             <tr class="text-center">
                                                 <th scope="col">#</th>
-                                                <th scope="col" sortable="name" (sort)="onSort($event)">Categoría</th>
-                                                <th scope="col" sortable="count" (sort)="onSort($event)">Ejercicios</th>
+                                                <th scope="col">Categoría</th>
+                                                <th scope="col">Ejercicios</th>
                                                 <th scope="col">Acción</th>
                                             </tr>
                                         </thead>
@@ -185,7 +201,8 @@
                                                         <i class="fas fa-edit"></i>
                                                     </a>
                                                     <a class="btn btn-outline-danger" data-toggle="modal"
-                                                        data-target="#deleteCategoryModal" (click)="setDeleteCategory(category.key)">
+                                                        data-target="#deleteCategoryModal"
+                                                        (click)="setDeleteCategory(category.key)">
                                                         <i class="fas fa-trash"></i>
                                                     </a>
                                                 </td>
@@ -224,7 +241,8 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="deleteExerciseModalLabel">Eliminar</h5>
-                <button type="button" class="close"  (click)="resetDeleteExercise()" data-dismiss="modal" aria-label="Close">
+                <button type="button" class="close" (click)="resetDeleteExercise()" data-dismiss="modal"
+                    aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
@@ -232,7 +250,8 @@
                 ¿Está seguro que desea eliminar este ejercicio?
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" (click)="resetDeleteExercise()" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" (click)="resetDeleteExercise()"
+                    data-dismiss="modal">Cancelar</button>
                 <button type="button" class="btn btn-danger" (click)="deleteExercise()">Eliminar</button>
             </div>
         </div>
@@ -247,7 +266,8 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="deleteCategoryModalLabel">Eliminar</h5>
-                <button type="button" class="close"  (click)="resetDeleteCategory()" data-dismiss="modal" aria-label="Close">
+                <button type="button" class="close" (click)="resetDeleteCategory()" data-dismiss="modal"
+                    aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
@@ -256,7 +276,8 @@
                 esta categoría.
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" (click)="resetDeleteCategory()" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" (click)="resetDeleteCategory()"
+                    data-dismiss="modal">Cancelar</button>
                 <button type="button" class="btn btn-danger" (click)="deleteCategory()">Eliminar</button>
             </div>
         </div>

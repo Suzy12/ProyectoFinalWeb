@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { UserModel } from '../../models/user.model'
 import { map } from 'rxjs/operators';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
@@ -10,12 +10,15 @@ export class AuthService {
   private url = 'https://www.googleapis.com/identitytoolkit/v3/relyingparty';
   private apikey = 'AIzaSyBIhIKuMPEpBV6_hRlqvXTqW8nGY53PUA8';
   userToken: string = '';
+  private logger = new Subject<boolean>();
 
   constructor(private http: HttpClient) {
+    this.logger.next(false);
     this.leerToken();
   }
 
   logout() {
+    this.logger.next(false);
     localStorage.removeItem('token');
   }
 
@@ -35,6 +38,7 @@ export class AuthService {
       authData
     ).pipe(
       map(resp => {
+        this.logger.next(true);
         this.guardarToken(resp['idToken']); //guarda en LS
         this.guardarNombre(resp["displayName"]);
         return resp;
@@ -84,6 +88,7 @@ export class AuthService {
 
   estaAutenticado(): boolean {
     if (this.userToken.length < 2) {
+      localStorage.setItem("logged", "false");
       return false;
     }
 
@@ -94,11 +99,15 @@ export class AuthService {
 
     // si es válido o no
     if (expiraDate > new Date()) {
+      localStorage.setItem("logged", "true");
       return true;
     } else {
+      localStorage.setItem("logged", "false");
       return false;
     }
+  }
 
-
+  isLoggedIn(): Observable<boolean> {
+    return this.logger.asObservable();
   }
 }
