@@ -161,24 +161,24 @@ export class DatabaseService {
 
   //Get amount of every type in the database
   getCantOfTypes() {
-    return this.db.list('/').snapshotChanges().pipe(map((element: any) => {
-      let listaTipos = element[2].payload.val().map((value: any) => { return { name: value.name, count: 0 } })
-      let listaLlaves = []
-      element[2].payload.forEach((element: any) => {
-        listaLlaves.push(element.key);
+    let listaTipos = []
+    return this.db.database.ref('types').get().then((element: any) => {
+      element.forEach(type => {
+        console.log(type.val());
+        console.log(type);
+        listaTipos.push({ name: type.val().name, count: 0, key: type.key })
       });
-      listaTipos.forEach((element: any, index: number) => {
-        element.key = listaLlaves[index];
-      });
-      let exercises = element[0].payload.val();
-      if (exercises.length) {
+      this.db.database.ref("exercises").get().then((exercises: any) => {
         exercises.forEach((exercise: any) => {
-          let temp = listaTipos.find((tipo: any) => tipo.name === exercise.section);
-          if (temp) temp.count++;
+          console.log(exercise.val().section);
+          let found = listaTipos.find((tipo: any) => tipo.name === exercise.val().section)
+          if (found) found.count++;
         });
-      }
-      return listaTipos
-    }));
+      }).finally(() => {
+        console.log(listaTipos);
+        return listaTipos
+      })
+    });
   }
 
   getCantStars() {
@@ -258,7 +258,7 @@ export class DatabaseService {
       updates[key + "/num_reviews"] = '' + (reviews + 1);
       this.db.database.ref("exercises").update(updates);
     })
-    .then(() => {return "El ejercicio fue calificado exitosamente"})
-    .catch(() => {return "Hubo un error, intente de nuevo"})
+      .then(() => { return "El ejercicio fue calificado exitosamente" })
+      .catch(() => { return "Hubo un error, intente de nuevo" })
   }
 }
