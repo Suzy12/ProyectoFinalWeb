@@ -64,6 +64,11 @@ export class DashboardComponent implements OnInit {
   }
   deleteCategory() {
     document.getElementById("deleteCategoryModal").click();
+    this.db.getFilesCategory(this.delete_category_key.toString()).subscribe((files) => {
+      if (files != null) {
+        this.firebaseStorage.deleteFiles(files)
+      }
+    });
     this.db.deleteType(this.delete_category_key.toString());
     this.setDeleteCategory(-1);
   }
@@ -71,16 +76,21 @@ export class DashboardComponent implements OnInit {
 
   getExercise(key: number) {
     console.log(key);
-    this.db.getExercise(key.toString()).subscribe((exercise)=> {
+    this.db.getExercise(key.toString()).subscribe((exercise) => {
       this.router.navigate(['/exercise', key], { state: exercise });
     })
-    
+
   }
   modifyExercise(key: any) {
     this.router.navigate(['/create-exercise'], { state: key })
   }
   deleteExercise() {
     document.getElementById("deleteExerciseModal").click();
+    this.db.getFilesExercise(this.delete_exercise_key.toString()).subscribe((files) => {
+      if (files != null) {
+        this.firebaseStorage.deleteFiles(files)
+      }
+    });
     this.db.deleteExercise(this.delete_exercise_key.toString());
     this.setDeleteExercise(-1);
   }
