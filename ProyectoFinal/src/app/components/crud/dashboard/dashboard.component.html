@@ -71,7 +71,6 @@
                                 <table class="table table-striped">
                                     <thead>
                                         <tr class="text-center">
-                                            <th scope="col">#</th>
                                             <th scope="col">Nombre</th>
                                             <th scope="col">Categoría
                                             </th>
@@ -85,7 +84,6 @@
                                     </thead>
                                     <tbody>
                                         <tr *ngFor="let exercise of exercises$ | async" class="text-center">
-                                            <th scope="row">{{ exercise.key }}</th>
                                             <td>
                                                 <ngb-highlight [result]="exercise.name"
                                                     [term]="exercisesService.searchTerm">
@@ -172,7 +170,6 @@
                                     <table class="table table-striped">
                                         <thead>
                                             <tr class="text-center">
-                                                <th scope="col">#</th>
                                                 <th scope="col">Categoría</th>
                                                 <th scope="col">Ejercicios</th>
                                                 <th scope="col">Acción</th>
@@ -180,7 +177,6 @@
                                         </thead>
                                         <tbody class="text-center">
                                             <tr *ngFor="let category of categories$ | async">
-                                                <th scope="row">{{ category.key }}</th>
                                                 <td>
                                                     <ngb-highlight [result]="category.name"
                                                         [term]="categoriesService.searchTerm">

@@ -124,8 +124,7 @@ export class CreateCategoryComponent implements OnInit {
     } else {
       key = this.db.insertType(category);
     }
-    console.log(key);
-    //this.uploadFiles(key);
+    this.uploadFiles(key);
   }
 
   //Upload files to cloud storage
