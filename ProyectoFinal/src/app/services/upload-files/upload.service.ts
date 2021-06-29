@@ -23,10 +23,10 @@ export class FirebaseStorageService {
   }
 
   public deleteFiles(files: any) {
-    files.array.forEach(file => {
+    files.forEach(file => {
       let storageReference = this.storage.refFromURL(file.url);
       storageReference.delete().subscribe((msg) => {
-        console.log(msg);
+        return;
 
       });
     });

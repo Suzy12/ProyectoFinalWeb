@@ -3,7 +3,7 @@ import { Component, QueryList, ViewChildren, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { CategorySortable } from '../../../models/category.model';
 import { CategoriesService } from '../../../services/categories/categories.service';
-import { NgbdSortableHeader, SortEvent} from '../../../directives/sortable.directive';
+import { NgbdSortableHeader, SortEvent } from '../../../directives/sortable.directive';
 import { FirebaseStorageService } from 'src/app/services/upload-files/upload.service';
 import { DatabaseService } from 'src/app/services/database/database.service';
 import { Router } from '@angular/router';
@@ -65,13 +65,16 @@ export class DashboardComponent implements OnInit {
   deleteCategory() {
     document.getElementById("deleteCategoryModal").click();
     this.db.deleteType(this.delete_category_key.toString());
-
-    this.resetDeleteCategory();
+    this.setDeleteCategory(-1);
   }
 
 
   getExercise(key: number) {
-    this.router.navigate(['/exercise', key], { state: this.exercisesService.getExercise(key) });
+    console.log(key);
+    this.db.getExercise(key.toString()).subscribe((exercise)=> {
+      this.router.navigate(['/exercise', key], { state: exercise });
+    })
+    
   }
   modifyExercise(key: any) {
     this.router.navigate(['/create-exercise'], { state: key })
@@ -79,7 +82,7 @@ export class DashboardComponent implements OnInit {
   deleteExercise() {
     document.getElementById("deleteExerciseModal").click();
     this.db.deleteExercise(this.delete_exercise_key.toString());
-    this.resetDeleteExercise();
+    this.setDeleteExercise(-1);
   }
 
   /* MODAL DELETE */
@@ -87,29 +90,23 @@ export class DashboardComponent implements OnInit {
   setDeleteCategory(key: any) {
     this.delete_category_key = key;
   }
-  resetDeleteCategory() {
-    this.delete_category_key = -1;
-  }
   setDeleteExercise(key: any) {
     this.delete_exercise_key = key;
-  }
-  resetDeleteExercise() {
-    this.delete_exercise_key = -1;
   }
   /* END: MODAL DELETE */
 
   getCategoriesTable() {
-    this.db.getCantOfTypes().then((categories:any) => {
-      console.log(categories);
-      this.categoriesService.setCategories(categories);
-      this.categories$ = this.categoriesService.categories$;
-      this.total$ = this.categoriesService.total$;
-    });
+    this.db.getTypes().subscribe(() => {
+      this.db.getCantOfTypes().then((categories: any) => {
+        this.categoriesService.setCategories(categories);
+        this.categories$ = this.categoriesService.categories$;
+        this.total$ = this.categoriesService.total$;
+      });
+    })
   }
 
   getExercisesTable() {
     this.db.getExercises().subscribe((exercises) => {
-      console.log(exercises);
       this.exercisesService.setExercises(exercises);
       this.exercises$ = this.exercisesService.exercises$;
       this.total_exercises$ = this.exercisesService.total$;

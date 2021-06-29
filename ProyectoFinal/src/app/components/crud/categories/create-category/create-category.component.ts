@@ -5,6 +5,7 @@ import { FirebaseStorageService } from 'src/app/services/upload-files/upload.ser
 import { ToastrService } from 'ngx-toastr';
 
 import { DatabaseService } from 'src/app/services/database/database.service';
+import { ThrowStmt } from '@angular/compiler';
 
 
 @Component({
@@ -37,6 +38,7 @@ export class CreateCategoryComponent implements OnInit {
     private toastr: ToastrService) {
 
     this.categoryForm = this.fb.group({
+      key: [''],
       name: ['', [Validators.required]],
       details: ['', [Validators.required]],
       files: this.fb.array([]),
@@ -49,7 +51,10 @@ export class CreateCategoryComponent implements OnInit {
         this.category = category;
         this.categoryForm.get("name").setValue(this.category.name);
         this.categoryForm.get("details").setValue(this.category.details);
-        this.categoryForm.setControl('files', this.fb.array(this.category.files || []));
+
+        if (category.files) {
+          this.categoryForm.setControl('files', this.fb.array(this.category.files || []));
+        }
 
       })
     }
@@ -92,7 +97,6 @@ export class CreateCategoryComponent implements OnInit {
   }
 
   return() {
-
     document.getElementById("returnModal").click();
     this.router.navigate(['/dashboard'])
   }
@@ -100,10 +104,10 @@ export class CreateCategoryComponent implements OnInit {
 
 
   save() {
-    if (!this.categoryForm.touched) {
+    /*if (!this.categoryForm.touched || !this.files().touched) {
       this.toastr.warning("No se realizaron cambios", 'La categoría no fue modificada', { timeOut: 5000 });
       return;
-    }
+    }*/
     this.loading = true;
     this.submitted = true;
     if (this.categoryForm.invalid) {
@@ -118,10 +122,11 @@ export class CreateCategoryComponent implements OnInit {
     let key: any;
     let category = this.categoryForm.getRawValue();
     if (this.modify) {
-      console.log("Hola");
+      category.key = this.category.key;
       key = category.key;
       this.db.updateType(category);
     } else {
+      delete category['key'];
       key = this.db.insertType(category);
     }
     this.uploadFiles(key);
@@ -132,22 +137,53 @@ export class CreateCategoryComponent implements OnInit {
     let all_files = this.files();
     let count_items_uploaded = 0;
 
-    this.firebaseStorage.deleteFiles(this.files_to_remove);
+    if (this.modify && this.files_to_remove.length != 0) {
+      this.firebaseStorage.deleteFiles(this.files_to_remove);
+    }
 
-    all_files.value.forEach((file) => {
-      let file_uploaded = this.firebaseStorage.uploadCloudStorage("category" + key, file.name, file.data.get('archivo'));
-      file_uploaded.then(() => {
-        let reference = this.firebaseStorage.referenceCloudStorage("category" + key, file.name);
-        reference.getDownloadURL().subscribe((URL) => {
-          file.url = URL;
+    if (all_files.length != 0) {
+
+      all_files.value.forEach((file) => {
+        if(file.data == undefined){
           count_items_uploaded++;
           if (count_items_uploaded == all_files.length) {
-            this.loading = false;
-            this.submitted = false;
+            this.endSuccess();
           }
+          return;
+        }
+        let file_uploaded = this.firebaseStorage.uploadCloudStorage("category" + key, file.name, file.data.get('archivo'));
+        file_uploaded.then(() => {
+          let reference = this.firebaseStorage.referenceCloudStorage("category" + key, file.name);
+          reference.getDownloadURL().subscribe((URL) => {
+            file.url = URL;
+            count_items_uploaded++;
+            if (count_items_uploaded == all_files.length) {
+              try {
+                this.db.updateFilesCategory(key, all_files.value);
+                this.endSuccess();
+              }
+              catch (error) {
+                this.loading = false;
+                this.submitted = false;
+                this.toastr.success("Los archivos no se subieron", error, { timeOut: 5000 });
+              };
+            }
+          });
         });
       });
-    });
+    }else{
+      this.endSuccess();
+    }
+    
+  }
+
+
+  endSuccess() {
+    this.loading = false;
+    this.submitted = false;
+    this.toastr.success("La categoría se guardó con éxito", 'Éxito', { timeOut: 5000 });
+    this.router.navigate(['/dashboard']);
+
   }
 
 }

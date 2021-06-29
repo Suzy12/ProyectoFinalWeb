@@ -74,6 +74,7 @@
                         <p>
                             <a class="text-success">Entradas</a>
                             <br>
+                            <span *ngIf="!exercise.solution.inputs">No hay información.</span>
                             <span *ngFor="let input of exercise.solution.inputs">
                                 {{input.name}}: {{input.type}}
                                 <br>
@@ -82,6 +83,7 @@
                         <p>
                             <a class="text-danger">Salidas</a>
                             <br>
+                            <span *ngIf="!exercise.solution.inputs">No hay información.</span>
                             <span *ngFor="let output of exercise.solution.outputs">
                                 {{output.name}}: {{output.type}}
                                 <br>

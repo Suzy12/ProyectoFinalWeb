@@ -32,6 +32,7 @@ export class DatabaseService {
 
   getExercise(id: string) {
     return this.db.object('exercises/' + id).snapshotChanges().pipe(map((element: any) => {
+      console.log(element);
       let object = element.payload.val();
       object.key = element.key;
       return object;
@@ -163,7 +164,7 @@ export class DatabaseService {
   getCantOfTypes() {
     let listaTipos = []
     return this.db.database.ref('types').get().then((element: any) => {
-      element.forEach((type:any) => {
+      element.forEach((type: any) => {
         listaTipos.push({ name: type.val().name, count: 0, key: type.key })
       });
       return this.db.database.ref("exercises").get().then((exercises: any) => {
@@ -255,5 +256,23 @@ export class DatabaseService {
     })
       .then(() => { return "El ejercicio fue calificado exitosamente" })
       .catch(() => { return "Hubo un error, intente de nuevo" })
+  }
+
+  updateFilesExercise(key: string, files: any[]) {
+    try {
+      let updates = {};
+      updates[key + "/files"] = files;
+      this.db.database.ref("exercises").update(updates);
+      return "Se subieron los archivos exitosamente"
+    } catch (error) { return "Hubo un error, intente de nuevo" }
+  }
+
+  updateFilesCategory(key: string, files: any[]) {
+    try {
+      let updates = {};
+      updates[key + "/files"] = files;
+      this.db.database.ref("types").update(updates);
+      return "Se subieron los archivos exitosamente"
+    } catch (error) { return "Hubo un error, intente de nuevo" }
   }
 }

@@ -1,5 +1,5 @@
 <div class="container mt-5 container-top">
-    <form [formGroup]="categoryForm" (ngSubmit)="save()" novalidate>
+    <form [formGroup]="categoryForm" novalidate>
 
         <div class="row">
             <div class="col-lg-6 col-12">
@@ -36,7 +36,8 @@
             <div class="col-lg-6 col-12">
                 <!-- FILES -->
                 <h5 class="font-weight-light mb-3">Archivos Adjuntos</h5>
-                <p>Si coloca archivos adjuntos con el mismo nombre, sólo se mantendrá el último archivo con ese nombre. </p>
+                <p>Si coloca archivos adjuntos con el mismo nombre, sólo se mantendrá el último archivo con ese nombre.
+                </p>
                 <table class="table" formArrayName="files">
                     <tr>
                         <th class="font-weight-normal"><i class="fas fa-sign-in-alt"></i> Agregar Archivos</th>
@@ -47,7 +48,8 @@
                     <tr *ngFor="let file of files().controls; let i=index" [formGroupName]="i">
                         <td>
                             <p>{{this.categoryForm.value.files[i].name}}</p>
-                            <input *ngIf="this.categoryForm.value.files[i].name == ''" type="file" #fileInput (change)="onFileInput($event, i)" />
+                            <input *ngIf="this.categoryForm.value.files[i].name == ''" type="file" #fileInput
+                                (change)="onFileInput($event, i)" />
                         </td>
                         <td>
                             <button (click)="removeFile(i)" class="btn btn-outline-danger"><i
@@ -61,7 +63,7 @@
         <div class="text-right mt-5">
             <button data-toggle="modal" data-target="#returnModal" class="btn btn-secondary mr-3"
                 [disabled]="loading">Cancelar</button>
-            <button type="submit" class="btn btn-fill" [disabled]="loading"><i *ngIf="loading"
+            <button (click)="save()" class="btn btn-fill" [disabled]="loading"><i *ngIf="loading"
                     class="fas fa-sync fa-spin"></i>Guardar</button>
         </div>
     </form>

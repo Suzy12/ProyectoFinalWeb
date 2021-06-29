@@ -110,7 +110,6 @@
                     <table class="table table-striped" >
                         <thead>
                             <tr>
-                                <th scope="col">#</th>
                                 <th scope="col">Categoría</th>
                                 <th scope="col">Ejercicios</th>
                                 <th scope="col">Acción</th>
@@ -118,7 +117,6 @@
                         </thead>
                         <tbody>
                             <tr *ngFor="let category of categories$ | async">
-                                <th scope="row">{{ category.key }}</th>
                                 <td>
                                     <ngb-highlight [result]="category.name" [term]="categoriesService.searchTerm">
                                     </ngb-highlight>

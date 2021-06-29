@@ -1,5 +1,5 @@
 <div class="container mt-5 container-top">
-    <form [formGroup]="exerciseForm" (ngSubmit)="save()" novalidate>
+    <form [formGroup]="exerciseForm" novalidate>
 
         <div class="row">
             <div class="col-lg-6 col-12">
@@ -47,6 +47,18 @@
                         </div>
                     </div>
                 </div>
+                <div class="form-group">
+                    <i class="fas fa-phone-volume"></i>
+                    <label for="name">Llamada </label>
+                    <input type="text" id="name" name="name" formControlName="call" class="form-control" required
+                        [ngClass]="{ 'is-invalid': submitted && form.call.errors }">
+                    <div *ngIf="submitted && form.call.errors" class="invalid-feedback">
+                        <div *ngIf="form.call.errors.required">
+                            <label class="font-weight-bold"><i class="fa fa-exclamation-circle"></i> El campo
+                                de la llamada es obligatorio</label>
+                        </div>
+                    </div>
+                </div>
                 <!-- END: GENERAL -->
 
                 <!-- EXAMPLES -->
@@ -60,9 +72,12 @@
                     </tr>
                     <tr *ngFor="let example of examples().controls; let i=index" [formGroupName]="i">
                         <td>
-                            <input type="text"  name="call"  formControlName="call" class="form-control" placeholder="Llamada">
-                            <input type="text"  name="result" formControlName="result" class="form-control" placeholder="Salida">
-                            <input type="text"  name="comment" formControlName="comment" class="form-control" placeholder="Comentarios">
+                            <input type="text" name="call" formControlName="call" class="form-control"
+                                placeholder="Llamada">
+                            <input type="text" name="result" formControlName="result" class="form-control"
+                                placeholder="Salida">
+                            <input type="text" name="comment" formControlName="comment" class="form-control"
+                                placeholder="Comentarios">
                         </td>
                         <td>
                             <button (click)="removeExample(i)" class="btn btn-outline-danger"><i
@@ -131,7 +146,8 @@
 
                 <!-- FILES -->
                 <h5 class="font-weight-light mb-3">Archivos Adjuntos</h5>
-                <p>Si coloca archivos adjuntos con el mismo nombre, sólo se mantendrá el último archivo con ese nombre. </p>
+                <p>Si coloca archivos adjuntos con el mismo nombre, sólo se mantendrá el último archivo con ese nombre.
+                </p>
                 <table class="table" formArrayName="files">
                     <tr>
                         <th class="font-weight-normal"><i class="fas fa-sign-in-alt"></i> Agregar Archivos</th>
@@ -155,8 +171,10 @@
             </div>
         </div>
         <div class="text-right mt-5">
-            <button data-toggle="modal" data-target="#returnModal" class="btn btn-secondary mr-3">Cancelar</button>
-            <button type="submit" class="btn btn-fill">Guardar</button>
+            <button data-toggle="modal" data-target="#returnModal" class="btn btn-secondary mr-3"
+                [disabled]="loading">Cancelar</button>
+            <button (click)="save()" class="btn btn-fill" [disabled]="loading"><i *ngIf="loading"
+                    class="fas fa-sync fa-spin"></i>Guardar</button>
         </div>
     </form>
     <br />

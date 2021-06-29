@@ -22,21 +22,6 @@ export class CreateExerciseComponent implements OnInit {
   modify: boolean = false;
   files_to_remove = [];
 
-  exam = [
-    {call: "cantidadDeDigitos(12345)", comment: "Poc", result: "5"}, 
-    {call: "cantidadDeDigitos(0)",comment: "Cero tiene un digito",result: "1"}]
-
-  urls = [
-    {
-      name: "original.jpg",
-      url: "https://firebasestorage.googleapis.com/v0/b/proyecto-web-36a12.appspot.com/o/attached_files%2Fcategory0%2Foriginal.jpg?alt=media&token=78ecd13f-b6cd-4b70-9a73-2c4d38059a8b"
-    },
-    {
-      name: "original (1).jpg",
-      url: "https://firebasestorage.googleapis.com/v0/b/proyecto-web-36a12.appspot.com/o/attached_files%2Fcategory0%2Ftempsnip.png?alt=media&token=9271e1d3-a4fe-40b6-9f60-3953f6b18a1d"
-    }]
-
-
   constructor(private highlightService: HighlightService, private fb: FormBuilder, private router: Router,
     private db: DatabaseService, private toastr: ToastrService, private firebaseStorage: FirebaseStorageService) {
 
@@ -53,9 +38,12 @@ export class CreateExerciseComponent implements OnInit {
       examples: this.fb.array([]),
       files: this.fb.array([]),
       creator: [''],
+      call: ['', [Validators.required]]
     });
 
     this.getAllCategories();
+
+    this.exerciseForm.get("creator").setValue(localStorage.getItem("nombre"));
 
     if (this.router.getCurrentNavigation().extras.state) {
       this.modify = true;
@@ -63,30 +51,50 @@ export class CreateExerciseComponent implements OnInit {
       this.db.getExercise(key.toString()).subscribe((exercise) => {
         this.exercise = exercise;
         console.log(exercise);
-        this.exerciseForm.get("name").setValue(this.exercise.name);
-        this.exerciseForm.get("section").setValue(this.exercise.section);
-        this.exerciseForm.get("details").setValue(this.exercise.details);
-        this.exerciseForm.get("solution.code").setValue(this.exercise.solution.code);
-        this.exerciseForm.get("creator").setValue(localStorage.getItem("nombre"))
 
-        this.exercise.examples.forEach(element => {
-          let f = this.newExample()
-          f.setValue(element);
-          this.examples().push(f);
+        this.exerciseForm = this.fb.group({
+          name: [this.exercise.name, [Validators.required]],
+          section: [this.exercise.section, [Validators.required]],
+          details: [this.exercise.details, [Validators.required]],
+          solution: this.fb.group({
+            outputs: this.fb.array([]),
+            inputs: this.fb.array([]),
+            code: [this.exercise.solution.code, [Validators.required]]
+
+          }),
+          examples: this.fb.array([]),
+          files: this.fb.array([]),
+          creator: [this.exercise.creator],
+          call: [this.exercise.call, [Validators.required]],
+          level: [this.exercise.level],
+          created: [this.exercise.created],
+          num_reviews: [this.exercise.num_reviews]
         });
 
-        this.exercise.solution.inputs.forEach(element => {
-          let f = this.newSolution();
-          f.setValue(element);
-          this.inputs().push(f);
-        });
+        if (exercise.examples) {
+          this.exercise.examples.forEach(element => {
+            let f = this.newExample()
+            f.setValue(element);
+            this.examples().push(f);
+          });
+        }
 
-        this.exercise.solution.outputs.forEach(element => {
-          let f = this.newSolution();
-          f.setValue(element);
-          this.outputs().push(f);
-        });
-        
+        if (exercise.solution.inputs) {
+          this.exercise.solution.inputs.forEach(element => {
+            let f = this.newSolution();
+            f.setValue(element);
+            this.inputs().push(f);
+          });
+        }
+
+        if (exercise.solution.outputs) {
+          this.exercise.solution.outputs.forEach(element => {
+            let f = this.newSolution();
+            f.setValue(element);
+            this.outputs().push(f);
+          });
+        }
+
         if (exercise.files) {
           this.exerciseForm.setControl('files', this.fb.array(this.exercise.files || []));
         }
@@ -185,10 +193,10 @@ export class CreateExerciseComponent implements OnInit {
 
 
   save() {
-    if (!this.exerciseForm.touched) {
+    /*if (!this.exerciseForm.touched) {
       this.toastr.warning("No se realizaron cambios", 'La categoría no fue modificada', { timeOut: 5000 });
       return;
-    }
+    }*/
     this.loading = true;
     this.submitted = true;
     if (this.exerciseForm.invalid) {
@@ -203,13 +211,14 @@ export class CreateExerciseComponent implements OnInit {
     let key: any;
     let exercise = this.exerciseForm.getRawValue();
     if (this.modify) {
+      exercise.key = this.exercise.key;
       key = exercise.key;
       this.db.updateExercise(exercise);
     } else {
+      delete exercise['key'];
       key = this.db.insertExercise(exercise);
     }
-    console.log(key);
-    //this.uploadFiles(key);
+    this.uploadFiles(key);
   }
 
   //Upload files to cloud storage
@@ -217,22 +226,51 @@ export class CreateExerciseComponent implements OnInit {
     let all_files = this.files();
     let count_items_uploaded = 0;
 
-    this.firebaseStorage.deleteFiles(this.files_to_remove);
+    if (this.modify && this.files_to_remove.length != 0) {
+      this.firebaseStorage.deleteFiles(this.files_to_remove);
+    }
 
-    all_files.value.forEach((file) => {
-      let file_uploaded = this.firebaseStorage.uploadCloudStorage("exercise" + key, file.name, file.data.get('archivo'));
-      file_uploaded.then(() => {
-        let reference = this.firebaseStorage.referenceCloudStorage("exercise" + key, file.name);
-        reference.getDownloadURL().subscribe((URL) => {
-          file.url = URL;
+    if (all_files.length != 0) {
+
+      all_files.value.forEach((file) => {
+        if (file.data == undefined) {
           count_items_uploaded++;
           if (count_items_uploaded == all_files.length) {
-            this.loading = false;
-            this.submitted = false;
+            this.endSuccess();
           }
+          return;
+        }
+        let file_uploaded = this.firebaseStorage.uploadCloudStorage("exercise" + key, file.name, file.data.get('archivo'));
+        file_uploaded.then(() => {
+          let reference = this.firebaseStorage.referenceCloudStorage("exercise" + key, file.name);
+          reference.getDownloadURL().subscribe((URL) => {
+            file.url = URL;
+            count_items_uploaded++;
+            if (count_items_uploaded == all_files.length) {
+              try {
+                this.db.updateFilesExercise(key, all_files.value);
+                this.endSuccess();
+              }
+              catch (error) {
+                this.loading = false;
+                this.submitted = false;
+                this.toastr.success("Los archivos no se subieron", error, { timeOut: 5000 });
+              };
+            }
+          });
         });
       });
-    });
+    } else {
+      this.endSuccess();
+    }
+  }
+
+  endSuccess() {
+    this.loading = false;
+    this.submitted = false;
+    this.toastr.success("El ejercicio se guardó con éxito", 'Éxito', { timeOut: 5000 });
+    this.router.navigate(['/dashboard']);
+
   }
 
 }
