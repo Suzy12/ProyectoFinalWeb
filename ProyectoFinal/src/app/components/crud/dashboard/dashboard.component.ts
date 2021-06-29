@@ -99,7 +99,8 @@ export class DashboardComponent implements OnInit {
   /* END: MODAL DELETE */
 
   getCategoriesTable() {
-    this.db.getCantOfTypes().subscribe((categories) => {
+    this.db.getCantOfTypes().then((categories:any) => {
+      console.log(categories);
       this.categoriesService.setCategories(categories);
       this.categories$ = this.categoriesService.categories$;
       this.total$ = this.categoriesService.total$;

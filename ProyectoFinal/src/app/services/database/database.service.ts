@@ -163,22 +163,17 @@ export class DatabaseService {
   getCantOfTypes() {
     let listaTipos = []
     return this.db.database.ref('types').get().then((element: any) => {
-      element.forEach(type => {
-        console.log(type.val());
-        console.log(type);
+      element.forEach((type:any) => {
         listaTipos.push({ name: type.val().name, count: 0, key: type.key })
       });
-      this.db.database.ref("exercises").get().then((exercises: any) => {
+      return this.db.database.ref("exercises").get().then((exercises: any) => {
         exercises.forEach((exercise: any) => {
-          console.log(exercise.val().section);
           let found = listaTipos.find((tipo: any) => tipo.name === exercise.val().section)
           if (found) found.count++;
         });
-      }).finally(() => {
-        console.log(listaTipos);
-        return listaTipos
+        return listaTipos;
       })
-    });
+    })
   }
 
   getCantStars() {
