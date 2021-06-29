@@ -32,7 +32,6 @@ export class DatabaseService {
 
   getExercise(id: string) {
     return this.db.object('exercises/' + id).snapshotChanges().pipe(map((element: any) => {
-      console.log(element);
       let object = element.payload.val();
       object.key = element.key;
       return object;
@@ -185,13 +184,14 @@ export class DatabaseService {
         cant: 0
       })
     }
-    return this.db.object('exercises').valueChanges().pipe(map((element: any) => {
+    return this.db.database.ref('exercises').get().then((element: any) => {
       element.forEach((exercise: any) => {
-        let temp = listaEstrellas.find((estrella: any) => estrella.estrellas === exercise.level);
+        console.log(exercise.val().level);
+        let temp = listaEstrellas.find((estrella: any) => estrella.estrellas === exercise.val().level);
         if (temp) temp.cant++;
       });
       return listaEstrellas
-    }));
+    });
   }
 
   searchExercises(term: string) {
@@ -274,5 +274,12 @@ export class DatabaseService {
       this.db.database.ref("types").update(updates);
       return "Se subieron los archivos exitosamente"
     } catch (error) { return "Hubo un error, intente de nuevo" }
+  }
+
+  getFilesExercise(id: string) {
+    return this.db.object('exercises/' + id +"/files").valueChanges();
+  }
+  getFilesCategory(id: string) {
+    return this.db.object('types/' + id +"/files").valueChanges();
   }
 }

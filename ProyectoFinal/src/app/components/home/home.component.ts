@@ -55,7 +55,7 @@ export class HomeComponent implements OnInit {
   }
 
   getExercisesLevels(){
-    this.db.getCantStars().subscribe((levels)=>{
+    this.db.getCantStars().then((levels)=>{
       this.levels = levels;
     });
   }

@@ -21,6 +21,9 @@ export class SearchComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.db.getFilesCategory("1").subscribe((value:any) => {
+      console.log(value)
+    })
   }
 
   search() {
