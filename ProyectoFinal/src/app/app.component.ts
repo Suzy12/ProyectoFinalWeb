@@ -1,3 +1,8 @@
+/** Authors: 
+ * Susana Cob García
+ * Alejandro Tapia Álvarez
+*/
+
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from './services/auth/auth.service';
 
