@@ -115,4 +115,6 @@ export class ExercisesService {
     this.EXERCISES = exercises;
     this.initializeTable();
   }
+
+
 }
